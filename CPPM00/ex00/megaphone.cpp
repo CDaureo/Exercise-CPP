@@ -6,14 +6,14 @@
 /*   By: cdaureo- <cdaureo-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 13:27:23 by cdaureo-          #+#    #+#             */
-/*   Updated: 2025/10/27 14:09:03 by cdaureo-         ###   ########.fr       */
+/*   Updated: 2025/10/27 15:04:10 by cdaureo-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream> // Permite el uso de std::cout, std::endl
 #include <string>
 #include <cctype>
-int main(int argc, char **argv) {
+int main() {
 	if (argc == 1)
 	{
 		std::cout << "* LOUD AND UNBEARABLE FEEDBACK NOISE *" << std::endl;
