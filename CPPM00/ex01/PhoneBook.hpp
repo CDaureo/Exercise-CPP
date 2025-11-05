@@ -4,6 +4,7 @@
 
 class PhoneBook {
 	private:
+	
 		static const int maxContacts = 8;
 		Contacto contactos[maxContacts];
 		int contactCount;

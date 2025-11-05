@@ -1,4 +1,4 @@
-#include "contact.hpp"
+#include "Contact.hpp"
 
 Contacto::Contacto() : firstName(""), lastName(""), nickname(""), 
                        phoneNumber(""), darkestSecret("") {
