@@ -89,7 +89,7 @@ bool	Account::makeWithdrawal( int withdrawal ){
 		  std::cout << "Indice: " << _accountIndex 
 			  << "; Cantidad: " << _amount 
 			  << "; Retirado: " << withdrawal;
-		_amount =- withdrawal;
+		_amount -= withdrawal;
 		_nbWithdrawals++;
 		_totalAmount -= withdrawal;
 		_totalNbWithdrawals++;
