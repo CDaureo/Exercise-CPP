@@ -1,6 +1,6 @@
-NAME = megaphone
+NAME = Megaphone
 
-SRCS = megaphone.cpp
+SRCS = Megaphone.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 
