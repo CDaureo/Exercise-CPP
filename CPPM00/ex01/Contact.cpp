@@ -1,52 +1,52 @@
 #include "Contact.hpp"
 
-Contacto::Contacto() : firstName(""), lastName(""), nickname(""), 
+Contact::Contact() : firstName(""), lastName(""), nickname(""), 
                        phoneNumber(""), darkestSecret("") {
     // Constructor por defecto
 }
 
-Contacto::~Contacto() {
+Contact::~Contact() {
     // Destructor
 }
 
 // Getters
-std::string Contacto::getFirstName() const {
+std::string Contact::getFirstName() const {
     return firstName;
 }
 
-std::string Contacto::getLastName() const {
+std::string Contact::getLastName() const {
     return lastName;
 }
 
-std::string Contacto::getNickname() const {
+std::string Contact::getNickname() const {
     return nickname;
 }
 
-std::string Contacto::getPhoneNumber() const {
+std::string Contact::getPhoneNumber() const {
     return phoneNumber;
 }
 
-std::string Contacto::getDarkestSecret() const {
+std::string Contact::getDarkestSecret() const {
     return darkestSecret;
 }
 
 // Setters
-void Contacto::setFirstName(const std::string& firstName) {
+void Contact::setFirstName(const std::string& firstName) {
     this->firstName = firstName;
 }
 
-void Contacto::setLastName(const std::string& lastName) {
+void Contact::setLastName(const std::string& lastName) {
     this->lastName = lastName;
 }
 
-void Contacto::setNickname(const std::string& nickname) {
+void Contact::setNickname(const std::string& nickname) {
     this->nickname = nickname;
 }
 
-void Contacto::setPhoneNumber(const std::string& phoneNumber) {
+void Contact::setPhoneNumber(const std::string& phoneNumber) {
     this->phoneNumber = phoneNumber;
 }
 
-void Contacto::setDarkestSecret(const std::string& darkestSecret) {
+void Contact::setDarkestSecret(const std::string& darkestSecret) {
     this->darkestSecret = darkestSecret;
 }

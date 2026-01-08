@@ -16,7 +16,7 @@ bool readField(const std::string& prompt, std::string& field) {
 }
 
 void handleAddContact(PhoneBook& phoneBook) {
-    Contacto newContact;
+    Contact newContact;
     std::string firstName, lastName, nickname, phoneNumber, darkestSecret;
     
     if (!readField("First Name: ", firstName)) return;
@@ -31,7 +31,7 @@ void handleAddContact(PhoneBook& phoneBook) {
     newContact.setPhoneNumber(phoneNumber);
     newContact.setDarkestSecret(darkestSecret);
     phoneBook.addContact(newContact);
-    std::cout << "Contacto agregado exitosamente." << std::endl;
+    std::cout << "Contact agregado exitosamente." << std::endl;
 }
 
 int main()

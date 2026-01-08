@@ -6,10 +6,9 @@ class PhoneBook {
 	private:
 	
 		static const int maxContacts = 8;
-		Contacto contactos[maxContacts];
+		Contact Contacts[maxContacts];
 		int contactCount;
-		int index;
-		
+ 		
 		int getTotalContacts() const;
 		std::string truncateString(const std::string& str) const;
 		void displayContactTable() const;
@@ -18,7 +17,7 @@ class PhoneBook {
 	public:
 		PhoneBook(); // Constructor
 		~PhoneBook(); // Destructor
-		void addContact(Contacto contacto); // Añadir un contacto
-		void displayContacts() const; // Mostrar todos los contactos
-		void searchContact(); // Buscar y mostrar un contacto por índice
+		void addContact(Contact Contact); // Añadir un Contact
+		void displayContacts() const; // Mostrar todos los Contacts
+		void searchContact(); // Buscar y mostrar un Contact por índice
 };

@@ -2,7 +2,7 @@
 
 #include <string>
 
-class Contacto {
+class Contact {
     private:
         std::string firstName;
         std::string lastName;
@@ -11,8 +11,8 @@ class Contacto {
         std::string darkestSecret;
         
     public:
-        Contacto(); // Constructor
-        ~Contacto(); // Destructor
+        Contact(); // Constructor
+        ~Contact(); // Destructor
         
     // Getters
     std::string getFirstName() const;

@@ -3,14 +3,14 @@
 #include <iomanip>
 #include <sstream>
 
-PhoneBook::PhoneBook() : contactCount(0), index(0) {
+PhoneBook::PhoneBook() : contactCount(0) {
     // Constructor por defecto
 }
 PhoneBook::~PhoneBook() {
     // Destructor
 }
 
-// Método privado para calcular el total de contactos actuales
+// Método privado para calcular el total de Contacts actuales
 int PhoneBook::getTotalContacts() const {
     if (contactCount < maxContacts) {
         return contactCount;
@@ -19,9 +19,9 @@ int PhoneBook::getTotalContacts() const {
     }
 }
 
-void PhoneBook::addContact(Contacto contacto) {
+void PhoneBook::addContact(Contact Contact) {
     int index = contactCount % maxContacts;
-    contactos[index] = contacto;
+    Contacts[index] = Contact;
     contactCount++;
 }
 
@@ -33,12 +33,12 @@ std::string PhoneBook::truncateString(const std::string& str) const {
     return str;
 }
 
-// Mostrar tabla de contactos
+// Mostrar tabla de Contacts
 void PhoneBook::displayContactTable() const {
     int totalContacts = getTotalContacts();
     
     if (totalContacts == 0) {
-        std::cout << "No hay contactos en la agenda." << std::endl;
+        std::cout << "No hay Contacts en la agenda." << std::endl;
         return;
     }
     
@@ -48,38 +48,38 @@ void PhoneBook::displayContactTable() const {
     std::cout << std::setw(10) << std::right << "Last Name" << "|";
     std::cout << std::setw(10) << std::right << "Nickname" << std::endl;
     
-    // Contactos
+    // Contacts
     for (int i = 0; i < totalContacts; i++) {
         std::cout << std::setw(10) << std::right << i << "|";
-        std::cout << std::setw(10) << std::right << truncateString(contactos[i].getFirstName()) << "|";
-        std::cout << std::setw(10) << std::right << truncateString(contactos[i].getLastName()) << "|";
-        std::cout << std::setw(10) << std::right << truncateString(contactos[i].getNickname()) << std::endl;
+        std::cout << std::setw(10) << std::right << truncateString(Contacts[i].getFirstName()) << "|";
+        std::cout << std::setw(10) << std::right << truncateString(Contacts[i].getLastName()) << "|";
+        std::cout << std::setw(10) << std::right << truncateString(Contacts[i].getNickname()) << std::endl;
     }
 }
 
-// Mostrar detalles de un contacto
+// Mostrar detalles de un Contact
 void PhoneBook::displayContactDetails(int index) const {
-    std::cout << "First Name: " << contactos[index].getFirstName() << std::endl;
-    std::cout << "Last Name: " << contactos[index].getLastName() << std::endl;
-    std::cout << "Nickname: " << contactos[index].getNickname() << std::endl;
-    std::cout << "Phone Number: " << contactos[index].getPhoneNumber() << std::endl;
-    std::cout << "Darkest Secret: " << contactos[index].getDarkestSecret() << std::endl;
+    std::cout << "First Name: " << Contacts[index].getFirstName() << std::endl;
+    std::cout << "Last Name: " << Contacts[index].getLastName() << std::endl;
+    std::cout << "Nickname: " << Contacts[index].getNickname() << std::endl;
+    std::cout << "Phone Number: " << Contacts[index].getPhoneNumber() << std::endl;
+    std::cout << "Darkest Secret: " << Contacts[index].getDarkestSecret() << std::endl;
 }
 
 void PhoneBook::displayContacts() const {
     int totalContacts = getTotalContacts();
     
     if (totalContacts == 0) {
-        std::cout << "No hay contactos en la agenda." << std::endl;
+        std::cout << "No hay Contacts en la agenda." << std::endl;
         return;
     }
     
     for (int i = 0; i < totalContacts; i++) {
-        std::cout << "Contacto " << (i + 1) << ": " 
-                  << contactos[i].getFirstName() << " " 
-                  << contactos[i].getLastName() << " (" 
-                  << contactos[i].getNickname() << ") - " 
-                  << contactos[i].getPhoneNumber() << std::endl;
+        std::cout << "Contact " << (i + 1) << ": " 
+                  << Contacts[i].getFirstName() << " " 
+                  << Contacts[i].getLastName() << " (" 
+                  << Contacts[i].getNickname() << ") - " 
+                  << Contacts[i].getPhoneNumber() << std::endl;
     }
 
 }
@@ -88,15 +88,15 @@ void PhoneBook::searchContact()
     int totalContacts = getTotalContacts();
     
     if (totalContacts == 0) {
-        std::cout << "No hay contactos en la agenda." << std::endl;
+        std::cout << "No hay Contacts en la agenda." << std::endl;
         return;
     }
     
-    // Mostrar tabla de contactos
+    // Mostrar tabla de Contacts
     displayContactTable();
     
     // Pedir índice
-    std::cout << "Ingrese el indice del contacto: ";
+    std::cout << "Ingrese el indice del Contact: ";
     std::string input;
     if (!std::getline(std::cin, input)) {
         return; // EOF
@@ -115,7 +115,7 @@ void PhoneBook::searchContact()
         return;
     }
     
-    // Mostrar detalles del contacto
+    // Mostrar detalles del Contact
     std::cout << std::endl;
     displayContactDetails(index);
 }
