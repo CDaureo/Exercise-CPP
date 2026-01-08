@@ -10,16 +10,16 @@ int Account::_totalNbWithdrawals = 0;
 
 void Account::_displayTimestamp( void ) {
     std::time_t now = std::time(0);
-    std::tm* timeinfo = std::localtime(&now);
-    
-    	std::cout << "[" << std::setw(2)  << timeinfo->tm_mday
-		<< std::setfill('0') << "-" << std::setw(2) << (timeinfo->tm_mon + 1)
-		<< "-" << (timeinfo->tm_year + 1900)
-		<< "  "
-		<< std::setw(2) << timeinfo->tm_hour << ":"
-		<< std::setw(2) << timeinfo->tm_min << ":"
-		<< std::setw(2) << timeinfo->tm_sec
-		<< "] ";
+    std::tm* t = std::localtime(&now);
+    std::cout << "[" 
+              << (t->tm_year + 1900)
+              << std::setw(2) << std::setfill('0') << (t->tm_mon + 1)
+              << std::setw(2) << std::setfill('0') << t->tm_mday
+              << "_"
+              << std::setw(2) << std::setfill('0') << t->tm_hour
+              << std::setw(2) << std::setfill('0') << t->tm_min
+              << std::setw(2) << std::setfill('0') << t->tm_sec
+              << "] ";
 }
 //Constructor privado
 Account::Account() {
