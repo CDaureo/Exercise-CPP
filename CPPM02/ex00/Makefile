@@ -1,26 +1,25 @@
-NAME = fixedPointNumbers
+NAME = megaphone
 
-SRC = Fixed.cpp main.cpp
-OBJ = $(SRC:.cpp=.o)
+SRCS = megaphone.cpp
 
-CXX = g++
-CXXFLAGS = -std=c++11 -Wall -Wextra -Werror
+OBJS = $(SRCS:.cpp=.o)
 
-RM = rm -f
+CXX = c++
+CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
+$(NAME): $(OBJS)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
-	$(RM) $(OBJ)
+	rm -f $(OBJS)
 
 fclean: clean
-	$(RM) $(NAME)
+	rm -f $(NAME)
 
 re: fclean all
 
