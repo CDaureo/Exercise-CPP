@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ShrubberyCreationForm.cpp                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdaureo- <cdaureo-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: cdaureo- <cdaureo-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/06 20:59:52 by cdaureo-          #+#    #+#             */
-/*   Updated: 2026/07/06 22:13:08 by cdaureo-         ###   ########.fr       */
+/*   Updated: 2026/07/08 16:19:39 by cdaureo-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,11 @@ std::string ShrubberyCreationForm::getTarget() const
 const char *ShrubberyCreationForm::FormNotSignedException::what() const throw()
 {
 	return ("Form is not signed");
+}
+
+const char *ShrubberyCreationForm::FormNotGradedException::what() const throw()
+{
+	return ("Form is not graded");
 }
 
 void ShrubberyCreationForm::execute(const Bureaucrat &executor) const

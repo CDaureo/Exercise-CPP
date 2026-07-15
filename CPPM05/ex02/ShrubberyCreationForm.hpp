@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ShrubberyCreationForm.hpp                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdaureo- <cdaureo-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: cdaureo- <cdaureo-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/06 20:59:26 by cdaureo-          #+#    #+#             */
-/*   Updated: 2026/07/06 21:11:14 by cdaureo-         ###   ########.fr       */
+/*   Updated: 2026/07/08 16:20:17 by cdaureo-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,10 @@ public:
 	public:
 		const char *what() const throw();
 	};
-
+	class FormNotGradedException : public std::exception
+	{
+		public: const char *what() const throw();
+	};
 	ShrubberyCreationForm();
 	ShrubberyCreationForm(const std::string &target);
 	ShrubberyCreationForm(const ShrubberyCreationForm &other);
