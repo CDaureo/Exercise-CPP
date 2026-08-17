@@ -3,8 +3,9 @@
 #include <iostream>
 
 #include "Bureaucrat.hpp"
-#include "ShrubberyCreationForm.hpp"
+#include "PresidentialPardonForm.hpp"
 #include "RobotomyRequestForm.hpp"
+#include "ShrubberyCreationForm.hpp"
 
 int main()
 {
@@ -12,15 +13,15 @@ int main()
 
 	try
 	{
-		Bureaucrat alice("Alice", 1);
-		Bureaucrat bob("Bob", 73);
-		Bureaucrat carol("Carol", 46);
+		Bureaucrat boss("Boss", 1);
+		Bureaucrat worker("Worker", 140);
+		Bureaucrat intern("Intern", 150);
 
 		std::cout << "[1] Execute without signing" << std::endl;
 		RobotomyRequestForm unsignedForm("target-unsigned");
 		try
 		{
-			unsignedForm.execute(alice);
+			unsignedForm.execute(boss);
 		}
 		catch (const std::exception &e)
 		{
@@ -28,25 +29,35 @@ int main()
 		}
 
 		std::cout << std::endl << "[2] Sign with insufficient grade" << std::endl;
-		RobotomyRequestForm signFail("target-sign-fail");
-		bob.signAForm(signFail);
+		PresidentialPardonForm signFail("target-sign-fail");
+		worker.signAForm(signFail);
 
 		std::cout << std::endl << "[3] Execute with insufficient grade" << std::endl;
-		RobotomyRequestForm gradeFail("target-grade-fail");
-		alice.signAForm(gradeFail);
+		ShrubberyCreationForm gradeFail("target-grade-fail");
+		boss.signAForm(gradeFail);
 		try
 		{
-			gradeFail.execute(carol);
+			gradeFail.execute(intern);
 		}
 		catch (const std::exception &e)
 		{
 			std::cout << e.what() << std::endl;
 		}
 
-		std::cout << std::endl << "[4] Successful robotomy" << std::endl;
-		RobotomyRequestForm success("target-success");
-		alice.signAForm(success);
-		success.execute(alice);
+		std::cout << std::endl << "[4] Successful shrubbery" << std::endl;
+		ShrubberyCreationForm shrubbery("garden");
+		boss.signAForm(shrubbery);
+		shrubbery.execute(boss);
+
+		std::cout << std::endl << "[5] Successful robotomy" << std::endl;
+		RobotomyRequestForm robotomy("Bender");
+		boss.signAForm(robotomy);
+		robotomy.execute(boss);
+
+		std::cout << std::endl << "[6] Successful presidential pardon" << std::endl;
+		PresidentialPardonForm pardon("Arthur Dent");
+		boss.signAForm(pardon);
+		pardon.execute(boss);
 	}
 	catch (const std::exception &e)
 	{

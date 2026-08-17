@@ -6,7 +6,7 @@
 /*   By: cdaureo- <cdaureo-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/06 19:01:58 by cdaureo-          #+#    #+#             */
-/*   Updated: 2026/07/06 20:02:05 by cdaureo-         ###   ########.fr       */
+/*   Updated: 2026/07/06 20:39:38 by cdaureo-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,15 +78,15 @@ std::ostream &operator<<(std::ostream &out, const Bureaucrat &bureaucrat)
 	out << bureaucrat.getName() << ", bureaucrat grade " << bureaucrat.getGrade() << ".";
 	return (out);
 }
-void Bureaucrat::signForm(Form &form) const
+void Bureaucrat::signAForm(AForm &AForm) const
 {
 	try
 	{
-		form.beSigned(*this);
-		std::cout << *this << " signed " << form << std::endl;
+		AForm.beSigned(*this);
+		std::cout << *this << " signed " << AForm << std::endl;
 	}
 	catch (const std::exception &e)
 	{
-		std::cout << *this << " couldn't sign " << form << " because " << e.what() << "." << std::endl;
+		std::cout << *this << " couldn't sign " << AForm << " because " << e.what() << "." << std::endl;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: cdaureo- <cdaureo-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/06 18:47:13 by carlo             #+#    #+#             */
-/*   Updated: 2026/07/06 19:28:26 by cdaureo-         ###   ########.fr       */
+/*   Updated: 2026/07/06 20:39:38 by cdaureo-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ public:
 		const char *what() const throw();
 	};
 };
-//Para que el operador de salida imprima este formato por defecto.
+//Para que el operador de salida imprima este AFormato por defecto.
 std::ostream &operator<<(std::ostream &out, const Bureaucrat &bureaucrat);
 
 #endif

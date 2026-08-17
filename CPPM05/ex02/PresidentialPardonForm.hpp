@@ -11,3 +11,36 @@
 /* ************************************************************************** */
 
 
+#ifndef PRESIDENTIALPARDONFORM_HPP
+#define PRESIDENTIALPARDONFORM_HPP
+
+#include <exception>
+#include <string>
+#include <iostream>
+#include "AForm.hpp"
+
+class Bureaucrat;
+
+class PresidentialPardonForm : public AForm
+{
+private:
+	const std::string target;
+
+public:
+	class FormNotSignedException : public std::exception
+	{
+	public:
+		const char *what() const throw();
+	};
+
+	PresidentialPardonForm();
+	PresidentialPardonForm(const std::string &target);
+	PresidentialPardonForm(const PresidentialPardonForm &other);
+	PresidentialPardonForm &operator=(const PresidentialPardonForm &other);
+	virtual ~PresidentialPardonForm();
+
+	std::string getTarget() const;
+	virtual void execute(const Bureaucrat &executor) const;
+};
+
+#endif

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Form.hpp                                           :+:      :+:    :+:   */
+/*   AForm.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cdaureo- <cdaureo-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FORM_HPP
-#define FORM_HPP
+#ifndef AForm_HPP
+#define AForm_HPP
 
 #include <string>
 #include <exception>
@@ -19,7 +19,7 @@
 
 class Bureaucrat;
 
-class Form
+class AForm
 {
 	private:
 		const std::string name;
@@ -39,11 +39,11 @@ class Form
 			const char *what() const throw();
 		};
 		
-		Form();
-		Form(const std::string &name, int gradeSigned, int gradeExecuted);
-		Form(const Form &other);
-		Form &operator=(const Form &other);
-		~Form();
+		AForm();
+		AForm(const std::string &name, int gradeSigned, int gradeExecuted);
+		AForm(const AForm &other);
+		AForm &operator=(const AForm &other);
+		~AForm();
 		
 		std::string getName() const;
 		bool getSign() const;
@@ -52,15 +52,15 @@ class Form
 		void beSigned(const Bureaucrat &bureaucrat);
 };
 
-std::ostream &operator<<(std::ostream &out, const Form &form)
+std::ostream &operator<<(std::ostream &out, const AForm &AForm)
 {
-	out << form.getName() << ", form signed ";
-	if (form.getSign())
+	out << AForm.getName() << ", AForm signed ";
+	if (AForm.getSign())
 		out << "true";
 	else
 		out << "false";
-	out << ", grade to sign " << form.getGradeSigned()
-		<< ", grade to execute " << form.getGradeExecuted() << ".";
+	out << ", grade to sign " << AForm.getGradeSigned()
+		<< ", grade to execute " << AForm.getGradeExecuted() << ".";
 	return (out);
 }
 #endif
