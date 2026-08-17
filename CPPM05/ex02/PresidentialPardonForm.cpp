@@ -13,11 +13,13 @@
 #include "Bureaucrat.hpp"
 #include "PresidentialPardonForm.hpp"
 
+// Builds the default pardon form with subject-defined grades.
 PresidentialPardonForm::PresidentialPardonForm()
 	: AForm("PresidentialPardonForm", 25, 5), target("default")
 {
 }
 
+// Builds a pardon form bound to a specific target.
 PresidentialPardonForm::PresidentialPardonForm(const std::string &target)
 	: AForm("PresidentialPardonForm", 25, 5), target(target)
 {

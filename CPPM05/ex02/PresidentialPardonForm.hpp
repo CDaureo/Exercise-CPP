@@ -21,6 +21,7 @@
 
 class Bureaucrat;
 
+// Concrete form that grants a presidential pardon to its target.
 class PresidentialPardonForm : public AForm
 {
 private:
@@ -40,6 +41,7 @@ public:
 	virtual ~PresidentialPardonForm();
 
 	std::string getTarget() const;
+	// Pardons the target if the form is signed and the executor grade is sufficient.
 	virtual void execute(const Bureaucrat &executor) const;
 };
 

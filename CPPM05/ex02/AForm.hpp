@@ -19,6 +19,7 @@
 
 class Bureaucrat;
 
+// Abstract base class for forms that can be signed and later executed.
 class AForm
 {
 	private:
@@ -45,11 +46,17 @@ class AForm
 		AForm &operator=(const AForm &other);
 		virtual ~AForm();
 		
+		// Returns the immutable form name.
 		std::string getName() const;
+		// Indicates whether the form has already been signed.
 		bool getSign() const;
+		// Returns the minimum grade required to sign the form.
 		int getGradeSigned() const;
+		// Returns the minimum grade required to execute the form.
 		int getGradeExecuted() const;
+		// Signs the form if the bureaucrat has a sufficiently high grade.
 		void beSigned(const Bureaucrat &bureaucrat);
+		// Executes the specialized behavior implemented by each derived form.
 		virtual void execute(const Bureaucrat &executor) const = 0;
 		
 };

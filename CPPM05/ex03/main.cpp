@@ -19,20 +19,20 @@ int main()
 
 	if (robotomy != NULL)
 	{
-		boss.signAForm(*robotomy);
-		robotomy->execute(boss);
+		boss.signForm(*robotomy);
+		boss.executeForm(*robotomy);
 		delete robotomy;
 	}
 	if (shrubbery != NULL)
 	{
-		boss.signAForm(*shrubbery);
-		shrubbery->execute(boss);
+		boss.signForm(*shrubbery);
+		boss.executeForm(*shrubbery);
 		delete shrubbery;
 	}
 	if (pardon != NULL)
 	{
-		boss.signAForm(*pardon);
-		pardon->execute(boss);
+		boss.signForm(*pardon);
+		boss.executeForm(*pardon);
 		delete pardon;
 	}
 	delete unknown;

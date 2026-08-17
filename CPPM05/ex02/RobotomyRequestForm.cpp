@@ -16,6 +16,13 @@
 #include "Bureaucrat.hpp"
 #include "RobotomyRequestForm.hpp"
 
+// Builds the default robotomy form with subject-defined grades.
+RobotomyRequestForm::RobotomyRequestForm()
+	: AForm("RobotomyRequestForm", 72, 45), target("default")
+{
+}
+
+// Builds a robotomy form bound to a specific target.
 RobotomyRequestForm::RobotomyRequestForm(const std::string &target)
 	: AForm("RobotomyRequestForm", 72, 45), target(target)
 {
@@ -45,10 +52,6 @@ std::string RobotomyRequestForm::getTarget() const
 const char *RobotomyRequestForm::FormNotSignedException::what() const throw()
 {
 	return ("Form is not signed");
-}
-const char *RobotomyRequestForm::FormNotGradedException::what() const throw()
-{
-	return ("Form is not graded");
 }
 void RobotomyRequestForm::execute(const Bureaucrat &executor) const 
 {

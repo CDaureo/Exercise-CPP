@@ -30,14 +30,14 @@ int main()
 
 		std::cout << std::endl << "[2] Sign with insufficient grade" << std::endl;
 		PresidentialPardonForm signFail("target-sign-fail");
-		worker.signAForm(signFail);
+		worker.signForm(signFail);
 
 		std::cout << std::endl << "[3] Execute with insufficient grade" << std::endl;
 		ShrubberyCreationForm gradeFail("target-grade-fail");
-		boss.signAForm(gradeFail);
+		boss.signForm(gradeFail);
 		try
 		{
-			gradeFail.execute(intern);
+			intern.executeForm(gradeFail);
 		}
 		catch (const std::exception &e)
 		{
@@ -46,18 +46,18 @@ int main()
 
 		std::cout << std::endl << "[4] Successful shrubbery" << std::endl;
 		ShrubberyCreationForm shrubbery("garden");
-		boss.signAForm(shrubbery);
-		shrubbery.execute(boss);
+		boss.signForm(shrubbery);
+		boss.executeForm(shrubbery);
 
 		std::cout << std::endl << "[5] Successful robotomy" << std::endl;
 		RobotomyRequestForm robotomy("Bender");
-		boss.signAForm(robotomy);
-		robotomy.execute(boss);
+		boss.signForm(robotomy);
+		boss.executeForm(robotomy);
 
 		std::cout << std::endl << "[6] Successful presidential pardon" << std::endl;
 		PresidentialPardonForm pardon("Arthur Dent");
-		boss.signAForm(pardon);
-		pardon.execute(boss);
+		boss.signForm(pardon);
+		boss.executeForm(pardon);
 	}
 	catch (const std::exception &e)
 	{

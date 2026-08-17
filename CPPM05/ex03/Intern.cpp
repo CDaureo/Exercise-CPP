@@ -17,6 +17,7 @@
 #include "RobotomyRequestForm.hpp"
 #include "ShrubberyCreationForm.hpp"
 
+// Stateless default constructor.
 Intern::Intern()
 {
 }
@@ -51,14 +52,15 @@ AForm *Intern::createPresidential(const std::string &target)
 	return (new PresidentialPardonForm(target));
 }
 
+// Creates a matching form or returns NULL for unknown names.
 AForm *Intern::makeForm(const std::string &formName, const std::string &target) const
 {
-	const std::string formNames[3] = {
+	const std::string		formNames[3] = {
 		"shrubbery creation",
 		"robotomy request",
 		"presidential pardon"
 	};
-	const t_formCreator creators[3] = {
+	const t_formCreator		creators[3] = {
 		&Intern::createShrubbery,
 		&Intern::createRobotomy,
 		&Intern::createPresidential

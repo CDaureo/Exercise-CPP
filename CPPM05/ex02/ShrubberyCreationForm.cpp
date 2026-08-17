@@ -15,6 +15,13 @@
 #include "ShrubberyCreationForm.hpp"
 #include "Bureaucrat.hpp"
 
+// Builds the default shrubbery form with subject-defined grades.
+ShrubberyCreationForm::ShrubberyCreationForm()
+	: AForm("ShrubberyCreationForm", 145, 137), target("default")
+{
+}
+
+// Builds a shrubbery form bound to a specific target.
 ShrubberyCreationForm::ShrubberyCreationForm(const std::string &target)
 	: AForm("ShrubberyCreationForm", 145, 137), target(target)
 {
@@ -46,6 +53,11 @@ const char *ShrubberyCreationForm::FormNotSignedException::what() const throw()
 	return ("Form is not signed");
 }
 
+const char *ShrubberyCreationForm::FileOpenException::what() const throw()
+{
+	return ("Failed to open shrubbery output file");
+}
+
 void ShrubberyCreationForm::execute(const Bureaucrat &executor) const
 {
 	static const char *shrubbery[] =
@@ -67,9 +79,9 @@ void ShrubberyCreationForm::execute(const Bureaucrat &executor) const
 		throw FormNotSignedException();
 	if (executor.getGrade() > this->getGradeExecuted())
 		throw AForm::GradeTooLowException();
-    //Abre un fichero de salida
 	std::ofstream file((this->target + "_shrubbery").c_str());
-    //Recorre el arbol de arriba
+	if (!file.is_open())
+		throw FileOpenException();
 	for (int i = 0; shrubbery[i] != NULL; ++i)
 		file << shrubbery[i] << std::endl; 
 	file << std::endl;

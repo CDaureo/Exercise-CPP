@@ -11,11 +11,12 @@
 /* ************************************************************************** */
 
 #ifndef INTERN_HPP
-#define INTERN_HPP
+# define INTERN_HPP
 
-#include <string>
-#include "AForm.hpp"
+# include <string>
+# include "AForm.hpp"
 
+// Factory class able to create concrete forms from their textual names.
 class Intern
 {
 private:

@@ -6,16 +6,22 @@
 /*   By: cdaureo- <cdaureo-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/06 20:59:46 by cdaureo-          #+#    #+#             */
-/*   Updated: 2026/07/06 22:35:44 by cdaureo-         ###   ########.fr       */
+/*   Updated: 2026/08/17 00:00:00 by Codex            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cstdlib>
 
-#include "AForm.hpp"
 #include "Bureaucrat.hpp"
 #include "RobotomyRequestForm.hpp"
 
+// Builds the default robotomy form with subject-defined grades.
+RobotomyRequestForm::RobotomyRequestForm()
+	: AForm("RobotomyRequestForm", 72, 45), target("default")
+{
+}
+
+// Builds a robotomy form bound to a specific target.
 RobotomyRequestForm::RobotomyRequestForm(const std::string &target)
 	: AForm("RobotomyRequestForm", 72, 45), target(target)
 {
@@ -46,17 +52,14 @@ const char *RobotomyRequestForm::FormNotSignedException::what() const throw()
 {
 	return ("Form is not signed");
 }
-const char *RobotomyRequestForm::FormNotGradedException::what() const throw()
-{
-	return ("Form is not graded");
-}
-void RobotomyRequestForm::execute(const Bureaucrat &executor) const 
+
+// Emits drilling noises and succeeds roughly half of the time.
+void RobotomyRequestForm::execute(const Bureaucrat &executor) const
 {
 	if (!this->getSign())
 		throw FormNotSignedException();
 	if (executor.getGrade() > this->getGradeExecuted())
 		throw AForm::GradeTooLowException();
-
 	std::cout << "* BZZZZZZZZT *" << std::endl;
 	std::cout << "* DRRRRRRRRRR *" << std::endl;
 	std::cout << "* VRRRRRRRRRR *" << std::endl;

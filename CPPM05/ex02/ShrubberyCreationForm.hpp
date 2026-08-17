@@ -20,6 +20,7 @@
 
 class Bureaucrat;
 
+// Concrete form that writes an ASCII tree into a target file.
 class ShrubberyCreationForm : public AForm
 {
 private:
@@ -27,6 +28,11 @@ private:
 
 public:
 	class FormNotSignedException : public std::exception
+	{
+	public:
+		const char *what() const throw();
+	};
+	class FileOpenException : public std::exception
 	{
 	public:
 		const char *what() const throw();
@@ -39,8 +45,8 @@ public:
 	virtual ~ShrubberyCreationForm();
 
 	std::string getTarget() const;
+	// Creates the shrubbery output file if execution requirements are met.
 	virtual void execute(const Bureaucrat &executor) const;
 };
 
 #endif
-
