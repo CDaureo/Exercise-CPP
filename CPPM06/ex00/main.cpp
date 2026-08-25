@@ -6,7 +6,7 @@
 /*   By: cdaureo- <cdaureo-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 11:32:26 by cdaureo-          #+#    #+#             */
-/*   Updated: 2026/08/17 12:35:19 by cdaureo-         ###   ########.fr       */
+/*   Updated: 2026/08/17 14:23:21 by cdaureo-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,11 +140,11 @@ void ScalarConverter::printFromInt(int intValue)
 void ScalarConverter::printFromDouble(double value)
 {
     if (std::isnan(value) || std::isinf(value) || value < 0 || value > 127)
-    std::cout << "char: impossible" << std::endl;
+        std::cout << "char: impossible" << std::endl;
     else if (!std::isprint(static_cast<int>(value)))
-    std::cout << "char: Non displayable" << std::endl;
+        std::cout << "char: Non displayable" << std::endl;
     else
-    std::cout << "char: '" << static_cast<char>(value) << "'" << std::endl;
+        std::cout << "char: '" << static_cast<char>(value) << "'" << std::endl;
     
     if (std::isnan(value) || std::isinf(value)
     || value > INT_MAX || value < INT_MIN)
