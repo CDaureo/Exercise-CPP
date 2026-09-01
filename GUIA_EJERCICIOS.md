@@ -250,6 +250,14 @@ El objetivo es tomar un dato escrito como texto y averiguar de que tipo parece s
 Explicacion mas tecnica:
 `ScalarConverter` es una clase utilitaria con solo metodos estaticos. Intenta interpretar el literal como `char`, `int`, `float` o `double`, valida errores de parseo y rangos con `strtol`, `strtod`, `errno` y limites numericos, y despues muestra las conversiones posibles manejando casos especiales como `nan` o infinitos.
 
+### `CPPM06/ex01` - Serialization
+
+Explicacion poco tecnica:
+Aqui se trabaja una idea muy concreta: convertir una direccion de memoria en un numero y luego recuperar esa misma direccion desde ese numero. No se copian los datos; solo se transforma el puntero para entender mejor como representar direcciones.
+
+Explicacion mas tecnica:
+`Serialization` se ha planteado como clase utilitaria con metodos estaticos `serialize` y `deserialize`, usando `reinterpret_cast` para convertir entre `Data*` y `uintptr_t`. La estructura `Data` no esta vacia y contiene al menos un `int` y un `std::string`, lo suficiente para cumplir el enunciado. En `main.cpp` hay una prueba muy simple que crea un objeto `Data`, lo serializa, lo deserializa y comprueba por salida que el puntero restaurado coincide con el original y que los campos siguen siendo accesibles. El ejercicio ya tiene tambien un `Makefile` minimo para compilar `main.cpp`, `Serialization.cpp` y `Data.cpp`.
+
 ## Resumen general de aprendizaje
 
 Si se mira el repositorio en conjunto, la progresion de conceptos es esta:

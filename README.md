@@ -17,7 +17,7 @@ Repositorio con ejercicios de C++ organizados por modulos (`CPPM00`, `CPPM01`, e
 - `CPPM03`: herencia basica con la familia `ClapTrap`.
 - `CPPM04`: polimorfismo, clases abstractas y copia profunda.
 - `CPPM05`: excepciones, formularios y patron de factoria simple.
-- `CPPM06`: conversion de literales escalares.
+- `CPPM06`: conversion de literales escalares y serializacion basica de punteros.
 
 ## Como usarlo
 
