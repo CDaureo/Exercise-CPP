@@ -31,10 +31,25 @@ Se han documentado las carpetas que contienen codigo fuente:
 - `CPPM05/ex02`
 - `CPPM05/ex03`
 - `CPPM06/ex00`
+- `CPPM06/ex01`
+- `CPPM06/ex02`
 
-`CPPM07`, `CPPM08` y `CPPM09` solo contienen el PDF del enunciado.
+`CPPM07`, `CPPM08` y `CPPM09` contienen el PDF del enunciado y su documento informativo, pero aun no tienen codigo fuente.
 
 Nota: `CPPM02/ex00`, `CPPM02/ex01` y `CPPM02/ex02` contienen ejercicios equivalentes a los de `CPPM00`, asi que la explicacion refleja lo que realmente hay en la carpeta.
+
+## Documentacion por modulo
+
+- [CPPM00info.md](CPPM00/CPPM00info.md)
+- [CPPM01info.md](CPPM01/CPPM01info.md)
+- [CPPM02info.md](CPPM02/CPPM02info.md)
+- [CPPM03info.md](CPPM03/CPPM03info.md)
+- [CPPM04info.md](CPPM04/CPPM04info.md)
+- [CPPM05info.md](CPPM05/CPPM05info.md)
+- [CPPM06info.md](CPPM06/CPPM06info.md)
+- [CPPM07info.md](CPPM07/CPPM07info.md)
+- [CPPM08info.md](CPPM08/CPPM08info.md)
+- [CPPM09info.md](CPPM09/CPPM09info.md)
 
 ## CPPM00
 
@@ -248,7 +263,7 @@ Explicacion poco tecnica:
 El objetivo es tomar un dato escrito como texto y averiguar de que tipo parece ser, para despues mostrarlo en varios formatos distintos. Es una forma muy clara de aprender conversiones.
 
 Explicacion mas tecnica:
-`ScalarConverter` es una clase utilitaria con solo metodos estaticos. Intenta interpretar el literal como `char`, `int`, `float` o `double`, valida errores de parseo y rangos con `strtol`, `strtod`, `errno` y limites numericos, y despues muestra las conversiones posibles manejando casos especiales como `nan` o infinitos.
+`ScalarConverter` es una clase utilitaria con solo metodos estaticos. Intenta interpretar el literal como `char`, `int`, `float` o `double`, valida errores de parseo y rangos con `strtol`, `strtod`, `errno` y limites numericos, y despues muestra las conversiones posibles. El manejo de pseudoliterales esta incompleto: `nanf`, `+inff` y `-inff` se rechazan, y algunos casts a `int` de las funciones de salida requieren revisar los limites antes de convertir.
 
 ### `CPPM06/ex01` - Serialization
 
@@ -257,6 +272,17 @@ Aqui se trabaja una idea muy concreta: convertir una direccion de memoria en un 
 
 Explicacion mas tecnica:
 `Serialization` se ha planteado como clase utilitaria con metodos estaticos `serialize` y `deserialize`, usando `reinterpret_cast` para convertir entre `Data*` y `uintptr_t`. La estructura `Data` no esta vacia y contiene al menos un `int` y un `std::string`, lo suficiente para cumplir el enunciado. En `main.cpp` hay una prueba muy simple que crea un objeto `Data`, lo serializa, lo deserializa y comprueba por salida que el puntero restaurado coincide con el original y que los campos siguen siendo accesibles. El ejercicio ya tiene tambien un `Makefile` minimo para compilar `main.cpp`, `Serialization.cpp` y `Data.cpp`.
+
+### `CPPM06/ex02` - Identify real type
+
+Explicacion poco tecnica:
+El programa crea al azar un objeto de tipo `A`, `B` o `C` y lo entrega como un puntero a su clase base. Despues averigua que objeto se creo realmente, primero mediante un puntero y despues mediante una referencia.
+
+Explicacion mas tecnica:
+`Base` tiene un destructor virtual y las clases `A`, `B` y `C` heredan publicamente de ella. `generate()` usa `rand() % 3` y `new` para devolver una de las tres derivadas. Las dos sobrecargas de `identify` usan `dynamic_cast`: con punteros, una conversion fallida devuelve un puntero nulo; con referencias, lanza una excepcion que el codigo captura con `catch (...)` antes de probar el siguiente tipo. No se usa `typeid`. El `main` inicializa la semilla con la hora, identifica el mismo objeto de ambas formas y libera la memoria con `delete` a traves de `Base*`.
+
+Estado actual:
+La carpeta contiene `Base.hpp`, `Base.cpp` y `main.cpp`, pero todavia no tiene `Makefile`. La documentacion del modulo incluye un comando de compilacion manual. Cada ejecucion debe imprimir dos veces la misma letra (`A`, `B` o `C`); no tiene por que cambiar entre ejecuciones.
 
 ## Resumen general de aprendizaje
 

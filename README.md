@@ -7,7 +7,7 @@ Repositorio con ejercicios de C++ organizados por modulos (`CPPM00`, `CPPM01`, e
 - Ejercicios implementados desde `CPPM00` hasta `CPPM06`.
 - Enunciados PDF en varios modulos.
 - `CPPM07`, `CPPM08` y `CPPM09` con el enunciado, pero sin implementacion visible.
-- Una guia explicativa en [`GUIA_EJERCICIOS.md`](/home/carlo/VSCodeGit/Exercise-CPP/GUIA_EJERCICIOS.md).
+- Una guia explicativa en [`GUIA_EJERCICIOS.md`](GUIA_EJERCICIOS.md).
 
 ## Estructura general
 
@@ -17,7 +17,7 @@ Repositorio con ejercicios de C++ organizados por modulos (`CPPM00`, `CPPM01`, e
 - `CPPM03`: herencia basica con la familia `ClapTrap`.
 - `CPPM04`: polimorfismo, clases abstractas y copia profunda.
 - `CPPM05`: excepciones, formularios y patron de factoria simple.
-- `CPPM06`: conversion de literales escalares y serializacion basica de punteros.
+- `CPPM06`: conversion de literales escalares, serializacion de punteros e identificacion de tipos en tiempo de ejecucion.
 
 ## Como usarlo
 
@@ -32,4 +32,17 @@ Despues ejecuta el binario que genere ese ejercicio segun su propio `Makefile`.
 
 ## Documentacion
 
-La explicacion de que se aprende en cada carpeta resuelta esta en [`GUIA_EJERCICIOS.md`](/home/carlo/VSCodeGit/Exercise-CPP/GUIA_EJERCICIOS.md).
+La explicacion de que se aprende en cada carpeta resuelta esta en [`GUIA_EJERCICIOS.md`](GUIA_EJERCICIOS.md).
+
+Cada modulo dispone de su propio documento con explicaciones, archivos de consulta y ejemplos de uso:
+
+- [CPPM00info.md](CPPM00/CPPM00info.md)
+- [CPPM01info.md](CPPM01/CPPM01info.md)
+- [CPPM02info.md](CPPM02/CPPM02info.md)
+- [CPPM03info.md](CPPM03/CPPM03info.md)
+- [CPPM04info.md](CPPM04/CPPM04info.md)
+- [CPPM05info.md](CPPM05/CPPM05info.md)
+- [CPPM06info.md](CPPM06/CPPM06info.md)
+- [CPPM07info.md](CPPM07/CPPM07info.md)
+- [CPPM08info.md](CPPM08/CPPM08info.md)
+- [CPPM09info.md](CPPM09/CPPM09info.md)
