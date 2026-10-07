@@ -33,8 +33,11 @@ Se han documentado las carpetas que contienen codigo fuente:
 - `CPPM06/ex00`
 - `CPPM06/ex01`
 - `CPPM06/ex02`
+- `CPPM07/ex00`
+- `CPPM07/ex01`
+- `CPPM07/ex02`
 
-`CPPM07`, `CPPM08` y `CPPM09` contienen el PDF del enunciado y su documento informativo, pero aun no tienen codigo fuente.
+`CPPM08` y `CPPM09` contienen el PDF del enunciado y su documento informativo, pero aun no tienen codigo fuente.
 
 Nota: `CPPM02/ex00`, `CPPM02/ex01` y `CPPM02/ex02` contienen ejercicios equivalentes a los de `CPPM00`, asi que la explicacion refleja lo que realmente hay en la carpeta.
 
@@ -284,6 +287,35 @@ Explicacion mas tecnica:
 Estado actual:
 La carpeta contiene `Base.hpp`, `Base.cpp` y `main.cpp`, pero todavia no tiene `Makefile`. La documentacion del modulo incluye un comando de compilacion manual. Cada ejecucion debe imprimir dos veces la misma letra (`A`, `B` o `C`); no tiene por que cambiar entre ejecuciones.
 
+## CPPM07
+
+### `CPPM07/ex00` - Funciones plantilla
+
+Explicacion poco tecnica:
+Se escriben funciones que sirven para varios tipos de datos sin repetir el mismo algoritmo. El ejemplo intercambia y compara tanto enteros como cadenas.
+
+Explicacion mas tecnica:
+`whatever.hpp` define las plantillas `swap`, `min` y `max`. `swap` recibe referencias modificables; `min` y `max` reciben y devuelven referencias constantes. En caso de igualdad, ambas devuelven el segundo argumento. El tipo utilizado debe soportar las operaciones que ejecuta cada funcion. El `main` usa `::` para seleccionar las funciones del espacio global.
+
+### `CPPM07/ex01` - iter
+
+Explicacion poco tecnica:
+Una misma funcion recorre un array y aplica una accion a cada elemento: mostrarlo, incrementarlo o modificar sus campos.
+
+Explicacion mas tecnica:
+`iter(A* array, const std::size_t len, F f)` recibe un puntero, una longitud y una funcion cuyo tipo tambien es un parametro de plantilla. Permite trabajar con elementos modificables y constantes, segun el array y la funcion recibidos. El `main` comprueba enteros, decimales, cadenas, arrays constantes, una estructura `Point`, longitud cero y recorridos parciales mediante salida por consola y `assert`. Quien llama debe proporcionar una longitud que no exceda el array disponible.
+
+### `CPPM07/ex02` - Array
+
+Explicacion poco tecnica:
+Se construye un array cuyo tipo de elementos se elige al usarlo, por ejemplo `Array<int>`. Guarda su numero de elementos y detecta los accesos fuera de sus limites.
+
+Explicacion mas tecnica:
+`Array.hpp` declara la clase y al final incluye `Array.tpp`, donde se definen los metodos de la plantilla. El constructor por defecto crea un array vacio; el constructor con tamano reserva exactamente `num` elementos mediante `new T[num]()` y los inicializa por valor. El constructor de copia reserva almacenamiento propio y copia los elementos. Las dos versiones de `operator[]` devuelven `T&` o `const T&` y lanzan `std::exception` si `index >= _size`. `size() const` consulta el tamano sin modificar el objeto. El Makefile contempla `.hpp` y `.tpp` como dependencias; el `.tpp` se incluye, no se compila por separado.
+
+Estado actual:
+El ejemplo compila, imprime `42` y `3`, y captura la excepcion al acceder al indice `3` de un array de tres elementos. El destructor esta definido pero vacio: falta liberar `_data` con `delete[]`. El operador de asignacion esta declarado pero no definido; falta implementar la copia independiente tambien para la asignacion. El `main` actual no prueba la copia, la asignacion, el array vacio ni el acceso constante.
+
 ## Resumen general de aprendizaje
 
 Si se mira el repositorio en conjunto, la progresion de conceptos es esta:
@@ -296,3 +328,4 @@ Si se mira el repositorio en conjunto, la progresion de conceptos es esta:
 - Herencia, especializacion y polimorfismo.
 - Excepciones y validacion de reglas.
 - Creacion flexible de objetos y conversion entre tipos.
+- Programacion generica con plantillas de funciones y clases, const y acceso comprobado a arrays.

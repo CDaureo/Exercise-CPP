@@ -4,9 +4,9 @@ Repositorio con ejercicios de C++ organizados por modulos (`CPPM00`, `CPPM01`, e
 
 ## Que hay en este repositorio
 
-- Ejercicios implementados desde `CPPM00` hasta `CPPM06`.
+- Ejercicios con codigo desde `CPPM00` hasta `CPPM07`; `CPPM07/ex02` aun tiene pendientes de gestion de memoria y asignacion.
 - Enunciados PDF en varios modulos.
-- `CPPM07`, `CPPM08` y `CPPM09` con el enunciado, pero sin implementacion visible.
+- `CPPM08` y `CPPM09` con el enunciado, pero sin implementacion visible.
 - Una guia explicativa en [`GUIA_EJERCICIOS.md`](GUIA_EJERCICIOS.md).
 
 ## Estructura general
@@ -18,6 +18,7 @@ Repositorio con ejercicios de C++ organizados por modulos (`CPPM00`, `CPPM01`, e
 - `CPPM04`: polimorfismo, clases abstractas y copia profunda.
 - `CPPM05`: excepciones, formularios y patron de factoria simple.
 - `CPPM06`: conversion de literales escalares, serializacion de punteros e identificacion de tipos en tiempo de ejecucion.
+- `CPPM07`: plantillas de funciones (`swap`, `min`, `max`, `iter`) y clase plantilla `Array<T>` con acceso comprobado y definiciones en `.tpp`.
 
 ## Como usarlo
 
