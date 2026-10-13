@@ -1,10 +1,12 @@
 # CPPM02 - Documentacion de ejercicios
 
-[Volver a la guia general](../GUIA_EJERCICIOS.md)
+## Resumen
 
 Este documento describe el codigo presente en el modulo. Los ejemplos de terminal parten de la raiz del repositorio y se ejecutan por separado. Los Makefiles usan C++98 y las opciones `-Wall -Wextra -Werror`.
 
 En esta carpeta, `ex00`, `ex01` y `ex02` repiten ejercicios de CPPM00. La documentacion refleja ese contenido; `ex03` trabaja punto fijo y geometria.
+
+## Contenido
 
 ### [`ex00`](ex00/) - Megaphone duplicado
 
@@ -89,3 +91,7 @@ make
 
 Que observar:
 El `main` comprueba varios puntos respecto a un triangulo. Un punto sobre un borde o vertice debe quedar fuera; `1` representa interior y `0`, exterior.
+
+## Referencias
+
+[Volver a la guia general](../GUIA_EJERCICIOS.md) · [README](../README.md)

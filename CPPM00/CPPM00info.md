@@ -1,8 +1,10 @@
 # CPPM00 - Documentacion de ejercicios
 
-[Volver a la guia general](../GUIA_EJERCICIOS.md)
+## Resumen
 
 Este documento describe el codigo presente en el modulo. Los ejemplos de terminal parten de la raiz del repositorio y se ejecutan por separado. Los Makefiles usan C++98 y las opciones `-Wall -Wextra -Werror`.
+
+## Contenido
 
 ### [`ex00`](ex00/) - Megaphone
 
@@ -66,3 +68,7 @@ make
 
 Que observar:
 El programa ejecuta los casos de `tests.cpp`. Observa los totales compartidos, las retiradas rechazadas y las marcas de tiempo.
+
+## Referencias
+
+[Volver a la guia general](../GUIA_EJERCICIOS.md) · [README](../README.md)

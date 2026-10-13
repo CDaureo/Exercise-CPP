@@ -1,8 +1,10 @@
 # CPPM06 - Documentacion de ejercicios
 
-[Volver a la guia general](../GUIA_EJERCICIOS.md)
+## Resumen
 
 Este documento describe el codigo presente en el modulo. Los ejemplos de terminal parten de la raiz del repositorio y se ejecutan por separado. Los Makefiles usan C++98 y las opciones `-Wall -Wextra -Werror`.
+
+## Contenido
 
 ### [`ex00`](ex00/) - ScalarConverter
 
@@ -71,3 +73,7 @@ Que observar:
 Ambas llamadas a `identify` deben imprimir la misma letra. El cast de puntero imprime `NOTHING` si no encuentra A, B o C; la version de referencia termina sin imprimir si fallan los tres casts.
 
 El comando incluye `cstdlib` explicitamente porque `main.cpp` usa `srand` sin incluir su cabecera directamente. La carpeta aun no dispone de Makefile.
+
+## Referencias
+
+[Volver a la guia general](../GUIA_EJERCICIOS.md) · [README](../README.md)

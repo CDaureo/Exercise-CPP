@@ -1,15 +1,20 @@
 # Exercise-CPP
 
+## Resumen
+
 Repositorio con ejercicios de C++ organizados por modulos (`CPPM00`, `CPPM01`, etc.). Cada carpeta suele contener uno o varios ejercicios (`ex00`, `ex01`, ...) junto con su `Makefile` y, en algunos modulos, el PDF del enunciado.
 
-## Que hay en este repositorio
+## Contenido
 
-- Ejercicios con codigo desde `CPPM00` hasta `CPPM07`; `CPPM07/ex02` aun tiene pendientes de gestion de memoria y asignacion.
+### Que hay en este repositorio
+
+- Ejercicios con codigo desde `CPPM00` hasta `CPPM08`; `CPPM07/ex02` aun tiene pendientes de gestion de memoria y asignacion.
 - Enunciados PDF en varios modulos.
-- `CPPM08` y `CPPM09` con el enunciado, pero sin implementacion visible.
+- `CPPM08` con `easyfind`, `Span` y `MutantStack` implementados y probados.
+- `CPPM09` con el enunciado, pero sin implementacion visible.
 - Una guia explicativa en [`GUIA_EJERCICIOS.md`](GUIA_EJERCICIOS.md).
 
-## Estructura general
+### Estructura general
 
 - `CPPM00`: primeros ejercicios de consola, clases basicas y objetos con estado compartido.
 - `CPPM01`: memoria dinamica, punteros, referencias, archivos y despacho de comportamiento.
@@ -19,21 +24,26 @@ Repositorio con ejercicios de C++ organizados por modulos (`CPPM00`, `CPPM01`, e
 - `CPPM05`: excepciones, formularios y patron de factoria simple.
 - `CPPM06`: conversion de literales escalares, serializacion de punteros e identificacion de tipos en tiempo de ejecucion.
 - `CPPM07`: plantillas de funciones (`swap`, `min`, `max`, `iter`) y clase plantilla `Array<T>` con acceso comprobado y definiciones en `.tpp`.
+- `CPPM08`: contenedores STL, busqueda con `std::find`, distancias entre enteros y pilas con iteradores.
+- `CPPM09`: pendiente de implementacion.
 
-## Como usarlo
+### Como usarlo
 
 En cada ejercicio que tenga `Makefile`, entra en su carpeta y compila:
 
 ```bash
-cd CPPM01/ex04
+cd CPPM08/ex02
 make
+./ex02
 ```
 
-Despues ejecuta el binario que genere ese ejercicio segun su propio `Makefile`.
+El ejemplo ejecuta las pruebas de `MutantStack`. Para otros ejercicios, utiliza el nombre de binario indicado en su documento. En `CPPM08`, `make clean` elimina objetos y dependencias, `make fclean` elimina tambien el ejecutable y `make re` recompila desde cero.
 
-## Documentacion
+## Referencias
 
 La explicacion de que se aprende en cada carpeta resuelta esta en [`GUIA_EJERCICIOS.md`](GUIA_EJERCICIOS.md).
+
+Todos los documentos siguen la estructura `Resumen`, `Contenido` y `Referencias`. Cada ejercicio se presenta con explicacion poco tecnica, explicacion mas tecnica, archivos de consulta, compilacion y ejecucion, y que observar; se conservan notas de estado cuando existen pendientes.
 
 Cada modulo dispone de su propio documento con explicaciones, archivos de consulta y ejemplos de uso:
 

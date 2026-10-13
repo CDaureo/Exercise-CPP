@@ -1,10 +1,12 @@
 # CPPM07 - Documentacion de ejercicios
 
-[Volver a la guia general](../GUIA_EJERCICIOS.md)
+## Resumen
 
 El modulo trabaja plantillas de funciones y clases. Contiene el [enunciado](07.subject.pdf) y los ejercicios `ex00`, `ex01` y `ex02`, todos con Makefile. Los tres ejemplos actuales compilan con C++98 y `-Wall -Wextra -Werror`; `ex02` aun tiene pendientes descritos abajo.
 
 Los comandos siguientes parten de la raiz del repositorio y se ejecutan por separado. Cada Makefile ofrece `all`, `clean`, `fclean` y `re`.
+
+## Contenido
 
 ### [`ex00`](ex00/) - Funciones plantilla
 
@@ -82,3 +84,7 @@ Los indices validos son `0`, `1` y `2`. La excepcion se lanza antes de acceder a
 
 Sobre el archivo `.tpp`:
 La extension es una convencion para separar las definiciones de una plantilla de sus declaraciones. El compilador necesita ver esas definiciones al instanciar tipos como `Array<int>`, por eso `Array.hpp` incluye `Array.tpp` antes del `#endif`. Cambiar el `.tpp` provoca que el Makefile recompile `main.cpp`.
+
+## Referencias
+
+[Volver a la guia general](../GUIA_EJERCICIOS.md) · [README](../README.md)

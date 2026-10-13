@@ -1,8 +1,10 @@
 # CPPM03 - Documentacion de ejercicios
 
-[Volver a la guia general](../GUIA_EJERCICIOS.md)
+## Resumen
 
 Este documento describe el codigo presente en el modulo. Los ejemplos de terminal parten de la raiz del repositorio y se ejecutan por separado. Los Makefiles usan C++98 y las opciones `-Wall -Wextra -Werror`.
+
+## Contenido
 
 ### [`ex00`](ex00/) - ClapTrap
 
@@ -66,3 +68,7 @@ make
 
 Que observar:
 El `main` combina ClapTrap, ScavTrap y FragTrap. Observa las acciones especiales y las diferencias de estadisticas. El ejecutable del Makefile se llama `FragTrap`.
+
+## Referencias
+
+[Volver a la guia general](../GUIA_EJERCICIOS.md) · [README](../README.md)

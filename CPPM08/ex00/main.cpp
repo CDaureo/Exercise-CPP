@@ -11,19 +11,9 @@
 /* ************************************************************************** */
 
 #include "easyfind.hpp"
-
-
-template <typename T>
-typename T::iterator easyfind(T& container, int n)
-{
-    for (typename T::iterator it = container.begin();
-         it != container.end(); ++it)
-    {
-        if (*it == n)
-            return it;
-    }
-    throw std::runtime_error("Numero no encontrado");
-}
+#include <iostream>
+#include <list>
+#include <cstddef>
 
 //sizeof(values) devuelve el tamaño en bytes. Al dividirlo 
 //   entre el tamaño de un elemento, obtienes cuántos elementos hay.
@@ -39,7 +29,8 @@ int main()
     }
     catch (const std::exception& e)
     {
-        std::cerr << e.what() << std::endl;
+        std::cout << e.what() << std::endl;
+        return 1;
     }
     return 0;
 }

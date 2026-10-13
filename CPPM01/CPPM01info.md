@@ -1,8 +1,10 @@
 # CPPM01 - Documentacion de ejercicios
 
-[Volver a la guia general](../GUIA_EJERCICIOS.md)
+## Resumen
 
 Este documento describe el codigo presente en el modulo. Los ejemplos de terminal parten de la raiz del repositorio y se ejecutan por separado. Los Makefiles usan C++98 y las opciones `-Wall -Wextra -Werror`.
+
+## Contenido
 
 ### [`ex00`](ex00/) - Zombie
 
@@ -150,3 +152,7 @@ make
 
 Que observar:
 Con `WARNING` se muestran `WARNING` y `ERROR`. Con `DEBUG` se muestran todos los niveles; una palabra desconocida produce un mensaje de nivel no reconocido.
+
+## Referencias
+
+[Volver a la guia general](../GUIA_EJERCICIOS.md) · [README](../README.md)

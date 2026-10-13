@@ -1,8 +1,10 @@
 # CPPM05 - Documentacion de ejercicios
 
-[Volver a la guia general](../GUIA_EJERCICIOS.md)
+## Resumen
 
 Este documento describe el codigo presente en el modulo. Los ejemplos de terminal parten de la raiz del repositorio y se ejecutan por separado. Los Makefiles usan C++98 y las opciones `-Wall -Wextra -Werror`.
+
+## Contenido
 
 ### [`ex00`](ex00/) - Bureaucrat
 
@@ -87,3 +89,7 @@ make
 
 Que observar:
 El `main` solicita tres formularios conocidos y uno desconocido, `coffee request`. Libera los formularios creados con `delete`; la creacion de arbustos escribe `Garden_shrubbery`.
+
+## Referencias
+
+[Volver a la guia general](../GUIA_EJERCICIOS.md) · [README](../README.md)
