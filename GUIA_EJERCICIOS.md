@@ -41,8 +41,10 @@ Se han documentado las carpetas que contienen codigo fuente:
 - `CPPM08/ex00`
 - `CPPM08/ex01`
 - `CPPM08/ex02`
+- `CPPM09/ex00`
+- `CPPM09/ex01`
 
-`CPPM08` contiene los tres ejercicios implementados. `CPPM09` contiene el PDF del enunciado y su documento informativo, pero aun no tiene codigo fuente.
+`CPPM08` contiene los tres ejercicios implementados. `CPPM09` contiene `ex00` (Bitcoin Exchange), `ex01` (RPN), el PDF del enunciado y una [guia paso a paso](CPPM09/CPPM09info.md). Su ejercicio `ex02` queda pendiente.
 
 Nota: `CPPM02/ex00`, `CPPM02/ex01` y `CPPM02/ex02` contienen ejercicios equivalentes a los de `CPPM00`, asi que la explicacion refleja lo que realmente hay en la carpeta.
 
@@ -809,6 +811,66 @@ Todas las pruebas de MutantStack superadas.
 
 El `main` compara la salida del ejemplo con la de una `std::list` que recibe las mismas operaciones. Tambien verifica pila vacia, modificacion por iteradores, recorridos constantes e inversos, orden LIFO, copia a `std::stack`, copias independientes con cadenas, autoasignacion, contenedores `list` y `vector`, y un recorrido de 20.000 elementos. Usa algoritmos STL como `std::equal` y `std::find`. Un fallo imprime su mensaje y devuelve codigo de salida `1`.
 
+### CPPM09
+
+#### [`CPPM09/ex00`](CPPM09/ex00/) - Bitcoin Exchange
+
+Explicacion poco tecnica:
+El programa calcula el valor de una cantidad de bitcoins en una fecha. Consulta un historial de precios y, si no existe el dia solicitado, utiliza el registro anterior mas cercano. Una consulta incorrecta muestra un error y no impide procesar las siguientes.
+
+Explicacion mas tecnica:
+`BitcoinExchange` guarda los precios en `std::map<std::string, double>`. `loadDatabase()` lee `data.csv`, cuya cabecera es `date,exchange_rate`, valida las fechas y convierte los precios. `processInput()` lee el archivo pasado como argumento, con cabecera `date | value`, separa los campos, elimina espacios exteriores y exige cantidades entre 0 y 1000. No se debe pasar `data.csv` como archivo de consultas: se carga automaticamente.
+
+Las fechas se validan con formato fijo `YYYY-MM-DD`, dias por mes y años bisiestos. Las conversiones usan `std::istringstream` y rechazan texto sobrante. `upper_bound()` encuentra la primera fecha posterior; tras comprobar que no sea `begin()`, retroceder una posicion obtiene la fecha exacta o la anterior. Si no existe precio anterior o igual, se informa de un error. La clase respeta la forma canonica y los errores generales llegan al `catch` de `main`.
+
+Archivos de consulta: [BitcoinExchange.hpp](CPPM09/ex00/BitcoinExchange.hpp), [BitcoinExchange.cpp](CPPM09/ex00/BitcoinExchange.cpp), [main.cpp](CPPM09/ex00/main.cpp), [Makefile](CPPM09/ex00/Makefile), [data.csv](CPPM09/ex00/data.csv), [input.txt](CPPM09/ex00/input.txt). La [documentacion del modulo](CPPM09/CPPM09info.md) explica paso a paso las auxiliares, los flujos y la busqueda en el mapa.
+
+Compilacion y ejecucion:
+
+```bash
+cd CPPM09/ex00
+make
+./btc input.txt
+```
+
+Que observar:
+
+```text
+2011-01-03 => 3 = 0.9
+2011-01-03 => 2 = 0.6
+2011-01-03 => 1 = 0.3
+2011-01-03 => 1.2 = 0.36
+2011-01-09 => 1 = 0.32
+Error: not a positive number.
+Error: bad input => 2001-42-42
+2012-01-11 => 1 = 7.1
+Error: too large a number.
+```
+
+El Makefile compila con `c++ -Wall -Wextra -Werror -std=c++98` y no vuelve a enlazar sin cambios. `data.csv` se busca en el directorio de ejecucion. Se han comprobado el ejemplo, fechas invalidas y bisiestas, limites de cantidad y entradas con texto sobrante. `std::map` queda reservado para este ejercicio y no se puede reutilizar en los siguientes del modulo.
+
+#### [`CPPM09/ex01`](CPPM09/ex01/) - Reverse Polish Notation
+
+Explicacion poco tecnica:
+Una calculadora donde se escriben primero los numeros y despues el operador: `8 2 -` equivale a `8 - 2`. Los resultados se guardan para utilizarlos en las siguientes operaciones, sin necesitar parentesis.
+
+Explicacion mas tecnica:
+`RPN` utiliza `std::stack<int, std::list<int> >`. `evaluate()` lee tokens separados por espacios en blanco, acepta digitos de `0` a `9` y operadores `+ - / *`. Cada operador extrae primero el operando derecho y despues el izquierdo; guarda el resultado en la pila. Al terminar debe quedar exactamente un valor. La division es entera, con truncamiento hacia cero. Se validan los operandos disponibles, los tokens, la division por cero y el desbordamiento de `int` antes de operar. Los errores se escriben en `std::cerr` y devuelven codigo `1`.
+
+Archivos de consulta: [RPN.hpp](CPPM09/ex01/RPN.hpp), [RPN.cpp](CPPM09/ex01/RPN.cpp), [main.cpp](CPPM09/ex01/main.cpp), [Makefile](CPPM09/ex01/Makefile). La [documentacion del modulo](CPPM09/CPPM09info.md) desarrolla el algoritmo con una tabla de la pila y casos de error.
+
+Compilacion y ejecucion:
+
+```bash
+cd CPPM09/ex01
+make
+./RPN "8 9 * 9 - 9 - 9 - 4 - 1 +"
+./RPN "7 7 * 7 -"
+./RPN "1 2 * 2 / 2 * 2 4 - +"
+```
+
+Los resultados son `42`, `42` y `0`. Se han superado 336 comprobaciones, incluidos ejemplos, errores, limites de enteros y expresiones generadas. El Makefile compila en C++98 y no reenlaza sin cambios. `std::stack` y su almacenamiento `std::list` quedan reservados para este ejercicio; `vector` y `deque` siguen disponibles para `ex02`.
+
 ### Resumen general de aprendizaje
 
 Si se mira el repositorio en conjunto, la progresion de conceptos es esta:
@@ -823,6 +885,7 @@ Si se mira el repositorio en conjunto, la progresion de conceptos es esta:
 - Creacion flexible de objetos y conversion entre tipos.
 - Programacion generica con plantillas de funciones y clases, const y acceso comprobado a arrays.
 - Contenedores STL, algoritmos, iteradores, busqueda generica, distancias entre valores y pilas iterables.
+- Mapas ordenados, validacion de archivos y fechas, conversion numerica y busqueda del registro anterior.
 
 ## Referencias
 

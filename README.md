@@ -8,10 +8,10 @@ Repositorio con ejercicios de C++ organizados por modulos (`CPPM00`, `CPPM01`, e
 
 ### Que hay en este repositorio
 
-- Ejercicios con codigo desde `CPPM00` hasta `CPPM08`; `CPPM07/ex02` aun tiene pendientes de gestion de memoria y asignacion.
+- Ejercicios con codigo desde `CPPM00` hasta `CPPM09`; `CPPM07/ex02` aun tiene pendientes de gestion de memoria y asignacion.
 - Enunciados PDF en varios modulos.
 - `CPPM08` con `easyfind`, `Span` y `MutantStack` implementados y probados.
-- `CPPM09` con el enunciado, pero sin implementacion visible.
+- `CPPM09` con Bitcoin Exchange (`ex00`) y RPN (`ex01`) implementados y documentados; `ex02` pendiente.
 - Una guia explicativa en [`GUIA_EJERCICIOS.md`](GUIA_EJERCICIOS.md).
 
 ### Estructura general
@@ -25,7 +25,7 @@ Repositorio con ejercicios de C++ organizados por modulos (`CPPM00`, `CPPM01`, e
 - `CPPM06`: conversion de literales escalares, serializacion de punteros e identificacion de tipos en tiempo de ejecucion.
 - `CPPM07`: plantillas de funciones (`swap`, `min`, `max`, `iter`) y clase plantilla `Array<T>` con acceso comprobado y definiciones en `.tpp`.
 - `CPPM08`: contenedores STL, busqueda con `std::find`, distancias entre enteros y pilas con iteradores.
-- `CPPM09`: pendiente de implementacion.
+- `CPPM09`: mapas para consultar precios historicos y pilas para evaluar expresiones en notacion polaca inversa.
 
 ### Como usarlo
 
