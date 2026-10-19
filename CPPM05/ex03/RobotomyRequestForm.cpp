@@ -1,0 +1,72 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   RobotomyRequestForm.cpp                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cdaureo- <cdaureo-@student.42madrid.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/06 20:59:46 by cdaureo-          #+#    #+#             */
+/*   Updated: 2026/08/17 00:00:00 by Codex            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include <cstdlib>
+
+#include "Bureaucrat.hpp"
+#include "RobotomyRequestForm.hpp"
+
+// Builds the default robotomy form with subject-defined grades.
+RobotomyRequestForm::RobotomyRequestForm()
+	: AForm("RobotomyRequestForm", 72, 45), target("default")
+{
+}
+
+// Builds a robotomy form bound to a specific target.
+RobotomyRequestForm::RobotomyRequestForm(const std::string &target)
+	: AForm("RobotomyRequestForm", 72, 45), target(target)
+{
+}
+
+RobotomyRequestForm::RobotomyRequestForm(const RobotomyRequestForm &other)
+	: AForm(other), target(other.target)
+{
+}
+
+RobotomyRequestForm &RobotomyRequestForm::operator=(const RobotomyRequestForm &other)
+{
+	if (this != &other)
+		AForm::operator=(other);
+	return (*this);
+}
+
+RobotomyRequestForm::~RobotomyRequestForm()
+{
+}
+
+std::string RobotomyRequestForm::getTarget() const
+{
+	return (this->target);
+}
+
+const char *RobotomyRequestForm::FormNotSignedException::what() const throw()
+{
+	return ("Form is not signed");
+}
+
+// Emits drilling noises and succeeds roughly half of the time.
+void RobotomyRequestForm::execute(const Bureaucrat &executor) const
+{
+	if (!this->getSign())
+		throw FormNotSignedException();
+	if (executor.getGrade() > this->getGradeExecuted())
+		throw AForm::GradeTooLowException();
+	std::cout << "* BZZZZZZZZT *" << std::endl;
+	std::cout << "* DRRRRRRRRRR *" << std::endl;
+	std::cout << "* VRRRRRRRRRR *" << std::endl;
+	std::cout << "* BRRRRRRRRRR *" << std::endl;
+	std::cout << "* ZZZZZZZZT *" << std::endl;
+	if (std::rand() % 2)
+		std::cout << this->target << " has been robotomized successfully" << std::endl;
+	else
+		std::cout << this->target << " robotomy failed" << std::endl;
+}

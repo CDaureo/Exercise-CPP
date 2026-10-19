@@ -6,7 +6,7 @@
 /*   By: cdaureo- <cdaureo-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/06 18:47:13 by carlo             #+#    #+#             */
-/*   Updated: 2026/07/06 20:06:29 by cdaureo-         ###   ########.fr       */
+/*   Updated: 2026/07/06 20:39:38 by cdaureo-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,12 @@
 #define BUREAUCRAT_HPP
 
 #include <string>
-#include <iostream>
 #include <exception>
 #include <ostream>
-#include "Form.hpp"
 
 class Form;
 
+// Models a bureaucrat whose grade must stay within the [1, 150] range.
 class Bureaucrat
 {
 private:
@@ -37,6 +36,7 @@ public:
 	int getGrade() const;
 	void incrementGrade();
 	void decrementGrade();
+	// Attempts to sign a form and prints the outcome.
 	void signForm(Form &form) const;
 
 	class GradeTooHighException : public std::exception

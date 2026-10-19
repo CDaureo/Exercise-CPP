@@ -13,10 +13,12 @@
 #include "AForm.hpp"
 #include "Bureaucrat.hpp"
 
+// Builds a default form with the lowest valid requirements.
 AForm::AForm() : name("default"), sign(false), gradeSigned(150), gradeExecuted(150)
 {
 }
 
+// Builds a form and validates both grade thresholds.
 AForm::AForm(const std::string &name, int gradeSigned, int gradeExecuted)
 	: name(name), sign(false), gradeSigned(gradeSigned), gradeExecuted(gradeExecuted)
 {
@@ -31,6 +33,7 @@ AForm::AForm(const AForm &other)
 {
 }
 
+// Copies only the mutable signed state because the metadata is immutable.
 AForm &AForm::operator=(const AForm &other)
 {
 	if (this != &other)

@@ -14,13 +14,12 @@
 #define BUREAUCRAT_HPP
 
 #include <string>
-#include <iostream>
 #include <exception>
 #include <ostream>
-#include "AForm.hpp"
 
 class AForm;
 
+// Models a bureaucrat whose grade must stay within the valid subject range.
 class Bureaucrat
 {
 private:
@@ -37,7 +36,10 @@ public:
 	int getGrade() const;
 	void incrementGrade();
 	void decrementGrade();
-	void signAForm(AForm &AForm) const;
+	// Attempts to sign a form and reports the result.
+	void signForm(AForm &form) const;
+	// Attempts to execute a form and reports the result.
+	void executeForm(AForm const &form) const;
 
 	class GradeTooHighException : public std::exception
 	{

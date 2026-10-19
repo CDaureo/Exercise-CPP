@@ -6,7 +6,7 @@
 /*   By: cdaureo- <cdaureo-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/06 18:47:13 by carlo             #+#    #+#             */
-/*   Updated: 2026/07/06 19:28:26 by cdaureo-         ###   ########.fr       */
+/*   Updated: 2026/07/06 20:39:38 by cdaureo-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <exception>
 #include <ostream>
 
+// Models a bureaucrat whose grade must stay within the [1, 150] range.
 class Bureaucrat
 {
 private:
@@ -29,9 +30,13 @@ public:
 	Bureaucrat(const Bureaucrat &other);
 	Bureaucrat &operator=(const Bureaucrat &other);
 	~Bureaucrat();
+	// Returns the immutable bureaucrat name.
 	std::string getName() const;
+	// Returns the current bureaucrat grade.
 	int getGrade() const;
+	// Promotes the bureaucrat by decreasing the grade value.
 	void incrementGrade();
+	// Demotes the bureaucrat by increasing the grade value.
 	void decrementGrade();
 
 	class GradeTooHighException : public std::exception
@@ -46,7 +51,7 @@ public:
 		const char *what() const throw();
 	};
 };
-//Para que el operador de salida imprima este formato por defecto.
+
 std::ostream &operator<<(std::ostream &out, const Bureaucrat &bureaucrat);
 
 #endif

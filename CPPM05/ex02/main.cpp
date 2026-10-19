@@ -26,15 +26,15 @@ int main()
 		std::cout << "- Try executing unsigned: \n";
 		try { shrub.execute(executor137); } catch (const std::exception &e) { std::cout << e.what() << std::endl; }
 		std::cout << "- Sign with a suitable bureaucrat and execute: \n";
-		signer140.signAForm(shrub);
+		signer140.signForm(shrub);
 		try { shrub.execute(executor137); } catch (const std::exception &e) { std::cout << e.what() << std::endl; }
 
 		std::cout << "\n==== RobotomyRequestForm tests ====" << std::endl;
 		RobotomyRequestForm robo("Bender");
 		std::cout << "- Sign attempt by too low grade: \n";
-		bob.signAForm(robo);
+		bob.signForm(robo);
 		std::cout << "- Sign by high-rank bureaucrat (works): \n";
-		dave.signAForm(robo);
+		dave.signForm(robo);
 		std::cout << "- Execute with insufficient executor grade: \n";
 		try { robo.execute(carol); } catch (const std::exception &e) { std::cout << e.what() << std::endl; }
 		std::cout << "- Execute several times (50% success): \n";
@@ -48,8 +48,8 @@ int main()
 		std::cout << "- Execute unsigned: \n";
 		try { pres.execute(eric); } catch (const std::exception &e) { std::cout << e.what() << std::endl; }
 		std::cout << "- Sign attempts (insufficient then sufficient): \n";
-		bob.signAForm(pres);
-		dave.signAForm(pres);
+		bob.signForm(pres);
+		dave.signForm(pres);
 		std::cout << "- Execute with insufficient executor (should fail): \n";
 		try { pres.execute(dave); } catch (const std::exception &e) { std::cout << e.what() << std::endl; }
 		std::cout << "- Execute with sufficient executor (should pardon): \n";

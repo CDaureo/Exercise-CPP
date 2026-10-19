@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ShrubberyCreationForm.cpp                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdaureo- <cdaureo-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdaureo- <cdaureo-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/06 20:59:52 by cdaureo-          #+#    #+#             */
-/*   Updated: 2026/07/08 16:19:39 by cdaureo-         ###   ########.fr       */
+/*   Updated: 2026/07/06 22:13:08 by cdaureo-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,13 @@
 #include "ShrubberyCreationForm.hpp"
 #include "Bureaucrat.hpp"
 
+// Builds the default shrubbery form with subject-defined grades.
+ShrubberyCreationForm::ShrubberyCreationForm()
+	: AForm("ShrubberyCreationForm", 145, 137), target("default")
+{
+}
+
+// Builds a shrubbery form bound to a specific target.
 ShrubberyCreationForm::ShrubberyCreationForm(const std::string &target)
 	: AForm("ShrubberyCreationForm", 145, 137), target(target)
 {
@@ -46,9 +53,9 @@ const char *ShrubberyCreationForm::FormNotSignedException::what() const throw()
 	return ("Form is not signed");
 }
 
-const char *ShrubberyCreationForm::FormNotGradedException::what() const throw()
+const char *ShrubberyCreationForm::FileOpenException::what() const throw()
 {
-	return ("Form is not graded");
+	return ("Failed to open shrubbery output file");
 }
 
 void ShrubberyCreationForm::execute(const Bureaucrat &executor) const
@@ -72,10 +79,15 @@ void ShrubberyCreationForm::execute(const Bureaucrat &executor) const
 		throw FormNotSignedException();
 	if (executor.getGrade() > this->getGradeExecuted())
 		throw AForm::GradeTooLowException();
-    //Abre un fichero de salida
 	std::ofstream file((this->target + "_shrubbery").c_str());
-    //Recorre el arbol de arriba
+	if (!file.is_open())
+		throw FileOpenException();
 	for (int i = 0; shrubbery[i] != NULL; ++i)
 		file << shrubbery[i] << std::endl; 
 	file << std::endl;
+}
+
+const char *ShrubberyCreationForm::FormNotGradedException::what() const throw()
+{
+	return ("Form is not graded");
 }
