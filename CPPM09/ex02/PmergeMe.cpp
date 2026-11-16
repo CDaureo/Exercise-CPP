@@ -5,14 +5,18 @@
 #include <limits>
 #include <stdexcept>
 
+// Guarda el valor y un identificador para reconocer su pareja incluso con duplicados.
 PmergeMe::Element::Element(int number, std::size_t identity)
     : value(number), id(identity) {}
 
+// Crea el objeto con el vector y el deque vacíos.
 PmergeMe::PmergeMe() {}
 
+// Construye una copia de los dos contenedores del objeto recibido.
 PmergeMe::PmergeMe(const PmergeMe &other)
     : _vector(other._vector), _deque(other._deque) {}
 
+// Copia ambos contenedores si no es una autoasignación y devuelve el propio objeto.
 PmergeMe &PmergeMe::operator=(const PmergeMe &other)
 {
     if (this != &other)
@@ -23,8 +27,15 @@ PmergeMe &PmergeMe::operator=(const PmergeMe &other)
     return *this;
 }
 
+// Los contenedores liberan automáticamente su memoria al destruirse el objeto.
 PmergeMe::~PmergeMe() {}
 
+/*
+ * Convierte el argumento a int, aceptando un '+' inicial opcional.
+ * Acumula los dígitos y comprueba el límite antes de multiplicar por diez.
+ * Lanza una excepción si está vacío, contiene otros caracteres, supera INT_MAX
+ * o representa cero; por tanto, solo devuelve enteros estrictamente positivos.
+ */
 int PmergeMe::parsePositive(const char *text)
 {
     if (*text == '+')
@@ -46,6 +57,16 @@ int PmergeMe::parsePositive(const char *text)
     return value;
 }
 
+/*
+ * Ordena el vector con merge-insertion (Ford-Johnson). Divide los elementos
+ * en parejas: el mayor va a winners y el menor a losers. Ordena winners
+ * recursivamente y usa los identificadores para recuperar sus parejas.
+ * Los ganadores forman la cadena ordenada; el primer perdedor va al principio.
+ * Inserta los demás por bloques de Jacobsthal (b3, b2, b5, b4, ...), buscando
+ * mediante búsqueda binaria solo antes de su ganador, porque menor <= mayor.
+ * Si sobra un elemento sin pareja, lo inserta buscando en toda la cadena.
+ * Finalmente sustituye el vector recibido por la cadena ordenada.
+ */
 void PmergeMe::sortVector(std::vector<Element> &values)
 {
     if (values.size() < 2)
@@ -126,6 +147,14 @@ void PmergeMe::sortVector(std::vector<Element> &values)
     values.swap(chain);
 }
 
+/*
+ * Aplica Ford-Johnson al deque: separa cada pareja en ganador y perdedor,
+ * ordena los ganadores recursivamente y reagrupa los perdedores según el id
+ * de su ganador. Coloca el primer perdedor al inicio de la cadena ordenada.
+ * Después inserta los pendientes en el orden de Jacobsthal, usando búsqueda
+ * binaria antes de su pareja; el elemento sin pareja usa toda la cadena.
+ * Intercambia el resultado con el deque recibido para dejarlo ordenado.
+ */
 void PmergeMe::sortDeque(std::deque<Element> &values)
 {
     if (values.size() < 2)
@@ -206,6 +235,13 @@ void PmergeMe::sortDeque(std::deque<Element> &values)
     values.swap(chain);
 }
 
+/*
+ * Exige al menos un argumento y carga los números validados en cada contenedor.
+ * Mide por separado el tiempo de CPU de validación, carga y ordenación para
+ * vector y deque. Comprueba que ambos resultados coincidan y muestra la entrada,
+ * la secuencia ordenada y los tiempos en microsegundos. Los errores se propagan
+ * a main mediante excepciones.
+ */
 void PmergeMe::run(int argc, char **argv)
 {
     if (argc < 2)
