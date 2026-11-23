@@ -12,7 +12,7 @@ Explicacion poco tecnica:
 El objetivo es tomar un dato escrito como texto y averiguar de que tipo parece ser, para despues mostrarlo en varios formatos distintos. Es una forma muy clara de aprender conversiones.
 
 Explicacion mas tecnica:
-`ScalarConverter` es una clase utilitaria con solo metodos estaticos. Intenta interpretar el literal como `char`, `int`, `float` o `double`, valida errores de parseo y rangos con `strtol`, `strtod`, `errno` y limites numericos, y despues muestra las conversiones posibles. El manejo de pseudoliterales esta incompleto: `nanf`, `+inff` y `-inff` se rechazan, y algunos casts a `int` de las funciones de salida requieren revisar los limites antes de convertir.
+`ScalarConverter` expone el método estático `convert`. Detecta el tipo del literal y comprueba los rangos antes de convertir.
 
 Archivos de consulta: [ScalarConverter.cpp](ex00/ScalarConverter.cpp), [ScalarConverter.hpp](ex00/ScalarConverter.hpp), [main.cpp](ex00/main.cpp).
 
@@ -21,11 +21,11 @@ Compilacion y ejecucion:
 ```bash
 cd CPPM06/ex00
 make
-./scalar_converter 42
+./convert 42
 ```
 
 Que observar:
-Prueba tambien `a`, `42.0f`, `3.14` y un texto invalido. La logica de parseo y conversion esta en `main.cpp`; `ScalarConverter.cpp` contiene los miembros de construccion, copia y destruccion. La implementacion rechaza `nanf` y los infinitos con sufijo `f`; el tratamiento de pseudoliterales y los casts a `int` fuera de rango necesitan revision.
+Prueba también `a`, `42.0f`, `3.14`, `nanf`, `+inf` y un texto inválido. El parseo y las conversiones están en `ScalarConverter.cpp`.
 
 ### [`ex01`](ex01/) - Serialization
 

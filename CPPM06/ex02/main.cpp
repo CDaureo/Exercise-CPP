@@ -11,11 +11,12 @@
 /* ************************************************************************** */
 
 #include "Base.hpp"
+#include <cstdlib>
 #include <ctime>
-#include <iostream>
+
 int main()
 {
-    srand(time(NULL));
+    std::srand(std::time(NULL));
     Base* ptr = generate();
     //Pointer
     identify(ptr);

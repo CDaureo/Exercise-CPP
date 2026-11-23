@@ -13,7 +13,7 @@
 #ifndef SCALARCONVERTER_HPP
 # define SCALARCONVERTER_HPP
 
-#include <iostream>
+#include <string>
 
 class ScalarConverter 
 {
@@ -22,15 +22,6 @@ class ScalarConverter
         ScalarConverter(const ScalarConverter& other);
         ScalarConverter& operator=(const ScalarConverter& other);
         ~ScalarConverter();
-        
-        static bool parseChar(const std::string& literal, char& res);
-        static bool parseInt(const std::string& literal, int& res);
-        static bool parseFloat(const std::string& literal, float& res);
-        static bool parseDouble(const std::string& literal, double& res);
-        static void printFromChar(char value);
-        static void printFromInt(int value);
-        static void printFromFloat(float value);
-        static void printFromDouble(double value);
     public:
         static void convert(const std::string& literal);
 };
