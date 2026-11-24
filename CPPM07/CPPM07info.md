@@ -2,7 +2,7 @@
 
 ## Resumen
 
-El modulo trabaja plantillas de funciones y clases. Contiene el [enunciado](07.subject.pdf) y los ejercicios `ex00`, `ex01` y `ex02`, todos con Makefile. Los tres ejemplos actuales compilan con C++98 y `-Wall -Wextra -Werror`; `ex02` aun tiene pendientes descritos abajo.
+El modulo trabaja plantillas de funciones y clases. Contiene el [enunciado](07.subject.pdf) y los ejercicios `ex00`, `ex01` y `ex02`, todos con Makefile. Los ejemplos usan C++98 y `-Wall -Wextra -Werror`.
 
 Los comandos siguientes parten de la raiz del repositorio y se ejecutan por separado. Cada Makefile ofrece `all`, `clean`, `fclean` y `re`.
 
@@ -59,7 +59,7 @@ Explicacion mas tecnica:
 `Array.hpp` declara la clase y al final incluye `Array.tpp`, donde se definen los metodos de la plantilla. El constructor por defecto crea un array vacio; el constructor con tamano reserva exactamente `num` elementos mediante `new T[num]()` y los inicializa por valor. El constructor de copia reserva almacenamiento propio y copia los elementos. Las dos versiones de `operator[]` devuelven `T&` o `const T&` y lanzan `std::exception` si `index >= _size`. `size() const` consulta el tamano sin modificar el objeto. El Makefile contempla `.hpp` y `.tpp` como dependencias; el `.tpp` se incluye, no se compila por separado.
 
 Estado actual:
-El ejemplo compila, imprime `42` y `3`, y captura la excepcion al acceder al indice `3` de un array de tres elementos. El destructor esta definido pero vacio: falta liberar `_data` con `delete[]`. El operador de asignacion esta declarado pero no definido; falta implementar la copia independiente tambien para la asignacion. El `main` actual no prueba la copia, la asignacion, el array vacio ni el acceso constante.
+El ejemplo compila, imprime `42` y `3`, y captura la excepcion al acceder al indice `3` de un array de tres elementos. El destructor libera la memoria con `delete[]`. El operador de asignacion prepara una copia independiente antes de sustituir los datos del destino. El ejemplo de `main` muestra el acceso por indice, la consulta del tamano y la excepcion fuera de rango.
 
 Archivos de consulta: [Array.hpp](ex02/Array.hpp), [Array.tpp](ex02/Array.tpp), [main.cpp](ex02/main.cpp), [Makefile](ex02/Makefile).
 

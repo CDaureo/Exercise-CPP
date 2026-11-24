@@ -12,6 +12,7 @@
 
 #include "Array.hpp"
 #include <cstddef>
+#include <algorithm>
 
 template <typename T>
 Array<T>::Array() : _data(NULL), _size(0) {}
@@ -20,15 +21,36 @@ template <typename T>
 Array<T>::Array(unsigned int num) : _data(new T[num]()), _size(num) {}
 
 template <typename T>
-Array<T>::~Array(){};
+Array<T>::~Array()
+{
+    delete[] _data;
+}
 
 template <typename T>
 Array<T>::Array(const Array& other) : _data(new T[other._size]()), _size(other._size)
 {
-    for (unsigned int i = 0; i < _size; i++)
+    try
     {
-       _data[i] = other._data[i];
+        for (unsigned int i = 0; i < _size; i++)
+            _data[i] = other._data[i];
     }
+    catch (...)
+    {
+        delete[] _data;
+        throw;
+    }
+}
+
+template <typename T>
+Array<T>& Array<T>::operator=(const Array& other)
+{
+    if (this != &other)
+    {
+        Array copy(other);
+        std::swap(_data, copy._data);
+        std::swap(_size, copy._size);
+    }
+    return *this;
 }
 //Devuelve in arefencia modificable que permite leer i escribir
 template <typename T>
