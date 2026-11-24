@@ -1,34 +1,53 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: cdaureo- <cdaureo-@student.42madrid.com    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/09/21 18:27:20 by cdaureo-          #+#    #+#             */
-/*   Updated: 2026/09/21 19:00:25 by cdaureo-         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include "Array.hpp"
 #include <iostream>
-int main(void)
+#include "Array.hpp"
+
+#define MAX_VAL 750
+int main(int, char**)
 {
-  Array<int> numeros(3);
+    Array<int> numbers(MAX_VAL);
+    int* mirror = new int[MAX_VAL];
+    srand(time(NULL));
+    for (int i = 0; i < MAX_VAL; i++)
+    {
+        const int value = rand();
+        numbers[i] = value;
+        mirror[i] = value;
+    }
+    //SCOPE
+    {
+        Array<int> tmp = numbers;
+        Array<int> test(tmp);
+    }
 
-      numeros[0] = 42;
+    for (int i = 0; i < MAX_VAL; i++)
+    {
+        if (mirror[i] != numbers[i])
+        {
+            std::cerr << "didn't save the same value!!" << std::endl;
+            return 1;
+        }
+    }
+    try
+    {
+        numbers[-2] = 0;
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
+    try
+    {
+        numbers[MAX_VAL] = 0;
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
 
-      std::cout << numeros[0] << std::endl;     // 42
-      std::cout << numeros.size() << std::endl; // 3
-
-      try
-      {
-          numeros[3] = 10; // Fuera de rango: solo existen 0, 1 y 2
-      }
-      catch (const std::exception& e)
-      {
-          std::cerr << "Indice fuera de rango: " << e.what() << std::endl;
-      }
-
-      return 0;
+    for (int i = 0; i < MAX_VAL; i++)
+    {
+        numbers[i] = rand();
+    }
+    delete [] mirror;//
+    return 0;
 }

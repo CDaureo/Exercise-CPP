@@ -6,13 +6,14 @@
 /*   By: cdaureo- <cdaureo-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/21 18:33:31 by cdaureo-          #+#    #+#             */
-/*   Updated: 2026/09/21 19:03:25 by cdaureo-         ###   ########.fr       */
+/*   Updated: 2026/11/24 15:20:18 by cdaureo-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Array.hpp"
 #include <cstddef>
 #include <algorithm>
+#include <stdexcept>
 
 template <typename T>
 Array<T>::Array() : _data(NULL), _size(0) {}
@@ -58,7 +59,7 @@ T& Array<T>::operator[](unsigned int index)
 {
     if (index >= _size)
     {
-        throw std::exception();
+        throw std::out_of_range("Array index out of range: index must be less than the array size");
     }
     return _data[index];
 }
@@ -69,7 +70,7 @@ const T& Array<T>::operator[](unsigned int index) const
 {
         if (index >= _size)
     {
-        throw std::exception();
+        throw std::out_of_range("Array index out of range: index must be less than the array size");
     }
     return _data[index];
 }
