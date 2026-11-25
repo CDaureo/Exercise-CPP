@@ -3,7 +3,7 @@
 
 #include <stack>
 #include <deque>
-//DEQUE = DEFAULT TMB LO USO PQ ES EL CONTENEDOR PREDETERMINADO DE STACK
+//DEQUE = DEFAULT USED CAUSE IS THE DEFAULT CONTAINER OF STACK
 template <typename T, typename Container = std::deque<T> >
 class MutantStack : public std::stack<T, Container>
 {

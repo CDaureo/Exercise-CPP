@@ -14,7 +14,7 @@ Explicacion poco tecnica:
 Se busca un numero dentro de un grupo de enteros. La misma funcion sirve para distintos contenedores, sin escribir una busqueda diferente para cada uno.
 
 Explicacion mas tecnica:
-`easyfind(T& container, int n)` utiliza `std::find` sobre el intervalo `[begin(), end())`. Devuelve un `T::iterator` a la primera coincidencia y lanza `std::runtime_error` si no encuentra el numero, tambien cuando el contenedor esta vacio. La busqueda es lineal. La plantilla se define en `easyfind.hpp` para que pueda instanciarse desde otros archivos; incluye sus dependencias y esta protegida contra doble inclusion. Esta version recibe contenedores modificables y no ofrece una sobrecarga para contenedores constantes.
+`easyfind(T& container, int n)` utiliza `std::find` sobre el intervalo `[begin(), end())`. Devuelve un `T::iterator` a la primera coincidencia y lanza `std::runtime_error` si no encuentra el numero, tambien cuando el contenedor esta vacio. La busqueda es lineal. La plantilla se define en `easyfind.hpp` para que pueda instanciarse desde otros archivos; incluye sus dependencias y esta protegida contra doble inclusion. La sobrecarga para contenedores constantes devuelve un `T::const_iterator`.
 
 Archivos de consulta: [easyfind.hpp](ex00/easyfind.hpp), [main.cpp](ex00/main.cpp), [Makefile](ex00/Makefile).
 
@@ -27,13 +27,13 @@ make
 ```
 
 Que observar:
-El ejemplo busca `89` en una `std::list<int>` y muestra:
+El ejemplo busca `88` en una `std::list<int>` y muestra:
 
 ```text
-Numero encontrado: 89
+Numero encontrado: 88
 ```
 
-El `main` entregado demuestra una busqueda correcta. Durante la comprobacion tambien se probaron `std::vector`, duplicados, un valor ausente y un contenedor vacio; esas comprobaciones auxiliares no forman parte de este `main`.
+El `main` comprueba la primera coincidencia entre duplicados, la busqueda en un `std::vector` constante y las excepciones para un valor ausente y un contenedor vacio.
 
 ### [`ex01`](ex01/) - Span
 
@@ -55,15 +55,7 @@ make
 ./ex01
 ```
 
-Que observar:
-
-```text
-2
-14
-Todas las pruebas superadas (incluidos 20000 numeros).
-```
-
-El `main` comprueba el ejemplo, capacidad cero, Span vacio o con un solo elemento, capacidad agotada, duplicados, negativos, extremos de `int`, rangos vacios o demasiado grandes, iteradores de entrada desde un flujo, copias independientes y autoasignacion. Inserta 20.000 numeros desde una lista y verifica distancia minima `3` y maxima `59997`. Un fallo imprime su mensaje y devuelve codigo de salida `1`.
+El `main` muestra las distancias `2` y `14` del ejemplo del enunciado y comprueba la excepcion al insertar en un Span lleno. Luego anade 20.000 enteros mediante iteradores de un vector y muestra las distancias `1` y `19999`.
 
 ### [`ex02`](ex02/) - MutantStack (Mutated abomination)
 
@@ -88,17 +80,18 @@ make
 Que observar:
 
 ```text
-17
-1
-5
-3
-5
-737
-0
-Todas las pruebas de MutantStack superadas.
+Ejemplo del enunciado
+Cima tras insertar 5 y 17 = 17
+Elementos tras quitar el 17 = 1
+Recorrido de la base a la cima = 5 3 5 737 0
+El recorrido coincide con std::list.
+deque OK (recorrido 10 20 30, cima tras pop = 20)
+vector OK (recorrido 10 20 30, cima tras pop = 20)
+list OK (recorrido 10 20 30, cima tras pop = 20)
+Todas las pruebas de MutantStack.
 ```
 
-El `main` compara la salida del ejemplo con la de una `std::list` que recibe las mismas operaciones. Tambien verifica pila vacia, modificacion por iteradores, recorridos constantes e inversos, orden LIFO, copia a `std::stack`, copias independientes con cadenas, autoasignacion, contenedores `list` y `vector`, y un recorrido de 20.000 elementos. Usa algoritmos STL como `std::equal` y `std::find`. Un fallo imprime su mensaje y devuelve codigo de salida `1`.
+El `main` compara los resultados del ejemplo con los de una `std::list` que recibe las mismas operaciones. Tambien verifica pila vacia, modificacion por iteradores, recorridos constantes e inversos, orden LIFO, copia a `std::stack`, copias independientes con cadenas, y autoasignacion. Ejecuta la misma prueba de insercion, recorrido y extraccion con `std::deque`, `std::vector` y `std::list`. Usa algoritmos STL como `std::equal` y `std::find`. Un fallo imprime su mensaje y devuelve codigo de salida `1`.
 
 ## Referencias
 

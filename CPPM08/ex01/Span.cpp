@@ -6,7 +6,7 @@
 /*   By: cdaureo- <cdaureo-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/07 12:11:22 by cdaureo-          #+#    #+#             */
-/*   Updated: 2026/10/13 11:51:59 by cdaureo-         ###   ########.fr       */
+/*   Updated: 2026/11/25 14:05:58 by cdaureo-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <algorithm>
 
 Span::Span() : _capacity(0) {}
-
+//Fixed the capacity
 Span::Span(unsigned int n) : _capacity(n) {}
 
 Span::Span(const Span& other)
@@ -49,9 +49,8 @@ unsigned int Span::shortestSpan() const
         - static_cast<unsigned int>(sorted[0]);
     for (std::vector<int>::size_type i = 2; i < sorted.size(); ++i)
     {
-        // La resta sin signo evita overflow incluso entre INT_MIN e INT_MAX.
         const unsigned int distance = static_cast<unsigned int>(sorted[i])
-            - static_cast<unsigned int>(sorted[i - 1]);
+            - static_cast<unsigned int>(sorted[i - 1]); //FOR INT_MAX 
         if (distance < shortest)
             shortest = distance;
     }
