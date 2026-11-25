@@ -4,7 +4,7 @@
 
 int main(int argc, char **argv)
 {
-    // Las comillas hacen que la expresión completa llegue como un argumento.
+    // Quotes pass the entire expression as a single argument.
     if (argc != 2)
     {
         std::cerr << "Error: usage: ./RPN \"expression\"" << std::endl;

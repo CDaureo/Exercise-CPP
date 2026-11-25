@@ -18,6 +18,10 @@ private:
     std::vector<Element> _vector;
     std::deque<Element> _deque;
     static int parsePositive(const char *text);
+    static std::size_t findInsertPosition(const std::vector<Element> &chain,
+        std::size_t right, int value);
+    static std::size_t findInsertPosition(const std::deque<Element> &chain,
+        std::size_t right, int value);
     static void sortVector(std::vector<Element> &values);
     static void sortDeque(std::deque<Element> &values);
 

@@ -21,7 +21,7 @@ int RPN::calculate(int left, int right, char operation)
     const int minimum = std::numeric_limits<int>::min();
     const int maximum = std::numeric_limits<int>::max();
 
-    // Comprobamos los límites ANTES de operar: desbordar un int no es seguro.
+    // Check the bounds before performing the operation to avoid int overflow.
     if (operation == '+')
     {
         if ((right > 0 && left > maximum - right)
@@ -38,7 +38,7 @@ int RPN::calculate(int left, int right, char operation)
     }
     if (operation == '*')
     {
-        // Dividir los límites permite comprobar el producto sin calcularlo.
+        // Dividing the bounds lets us check for overflow without computing the product.
         if ((left > 0 && right > 0 && left > maximum / right)
             || (left > 0 && right < 0 && right < minimum / left)
             || (left < 0 && right > 0 && left < minimum / right)
@@ -50,7 +50,7 @@ int RPN::calculate(int left, int right, char operation)
         throw std::runtime_error("division by zero");
     if (left == minimum && right == -1)
         throw std::overflow_error("integer overflow");
-    // División entera con truncamiento hacia cero, también para negativos.
+    // Integer division truncates toward zero, including for negative values.
     const int quotient = left / right;
     if (quotient < 0 && left % right != 0
         && ((left < 0 && left % right > 0)
@@ -61,15 +61,15 @@ int RPN::calculate(int left, int right, char operation)
 
 int RPN::evaluate(const std::string &expression)
 {
-    // Una nueva evaluación no reutiliza operandos de llamadas anteriores.
+    // Clear any operands left over from previous evaluations.
     while (!_operands.empty())
-        _operands.pop(); // Elimina elemento
+        _operands.pop(); // Removes the top operand.
     std::istringstream input(expression);
     std::string token;
 
     while (input >> token)
     {
-        // Cada token debe ser un único dígito o un operador binario.
+        // Each token must be a single digit or a binary operator.
         if (token.size() != 1)
             throw std::runtime_error("invalid token: " + token);
         const char symbol = token[0];
@@ -82,7 +82,7 @@ int RPN::evaluate(const std::string &expression)
                 throw std::runtime_error("invalid token: " + token);
             if (_operands.size() < 2)
                 throw std::runtime_error("not enough operands");
-            // En "8 2 -", sale primero 2 (derecha) y después 8 (izquierda). LIFO(Last In, First Out)
+            // For "8 2 -", the stack pops 2 (right operand) first, then 8 (left operand).
             const int right = _operands.top();
             _operands.pop();
             const int left = _operands.top();
@@ -90,7 +90,7 @@ int RPN::evaluate(const std::string &expression)
             _operands.push(calculate(left, right, symbol));
         }
     }
-    // Cero resultados implica entrada vacía; varios, operadores insuficientes.
+    // An empty stack means empty input. Multiple values mean too few operators.
     if (_operands.size() != 1)
         throw std::runtime_error("expression must produce one result");
     return _operands.top();

@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PmergeMe · Ford–Johnson paso a paso</title>
+<style>
+  :root { color-scheme: dark; font-family: system-ui, sans-serif; color: #e8efff; background: #101725; }
+  body { margin: 0; }
+  main { max-width: 1100px; margin: auto; padding: 24px; }
+  h1 { margin: 0 0 8px; font-size: clamp(1.5rem, 4vw, 2.4rem); }
+  h2 { margin: 0 0 12px; font-size: 1.1rem; color: #ecf3ff; }
+  p { line-height: 1.5; }
+  .muted { color: #aebed9; }
+  .panel { background: #192337; border: 1px solid #34435d; border-radius: 12px; padding: 16px; }
+  .controls { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  button, select, summary { font: inherit; }
+  button, select { color: inherit; background: #263752; border: 1px solid #526686; border-radius: 7px; padding: 7px 12px; }
+  button { cursor: pointer; }
+  button:disabled { opacity: .45; cursor: default; }
+  #next { background: #245493; }
+  input[type=range] { width: 100%; margin: 14px 0 2px; accent-color: #80b2ff; }
+  #event { margin: 8px 0 0; font-size: 1.12rem; font-weight: 650; overflow-wrap: anywhere; }
+  #status { font-weight: 700; font-variant-numeric: tabular-nums; }
+  .layout { display: grid; grid-template-columns: 1fr 300px; gap: 14px; margin-top: 14px; }
+  #chart { display: flex; flex-direction: column; gap: 15px; }
+  .bars { display: flex; gap: 6px; min-height: 122px; overflow-x: auto; padding: 0 4px 6px; }
+  .bar { display: grid; flex: 0 0 auto; min-width: 46px; grid-template-rows: auto 1fr auto; align-items: end; text-align: center; font: 700 16px ui-monospace, monospace; }
+  .fill { width: 100%; border-radius: 4px 4px 0 0; background: #84b8ff; }
+  .winners .fill { background: #65dab1; }
+  .losers .fill { background: #fdad7c; }
+  .pending .fill { background: #c5a2fb; }
+  .row-winners h2 { color: #65dab1; }
+  .row-losers h2 { color: #fdad7c; }
+  .row-pending h2 { color: #c5a2fb; }
+  .row-chain h2 { color: #a9cfff; }
+  .bar.highlight .fill { outline: 2px solid #fff; outline-offset: -2px; }
+  .bar.dim { opacity: .45; }
+  .bar small { margin-top: 4px; color: #d8e5fb; font-size: 13px; }
+  #timeline { height: 450px; overflow: auto; display: flex; flex-direction: column; gap: 4px; }
+  #timeline button { text-align: left; font-size: .95rem; padding: 7px 9px; overflow-wrap: anywhere; }
+  #timeline button[aria-current=true] { background: #245493; border-color: #80b2ff; }
+  details { margin-top: 14px; overflow-wrap: anywhere; }
+  @media (max-width: 740px) { .layout { grid-template-columns: 1fr; } #timeline { height: 220px; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>PmergeMe · Ford–Johnson</h1>
+  <p class="muted">Cada barra muestra el valor y su ID original. El nivel indica la profundidad de la recursión.</p>
+  <section class="panel" aria-label="Controles del recorrido">
+    <div class="controls">
+      <button id="prev" type="button">← Anterior</button>
+      <button id="next" type="button">Siguiente →</button>
+      <button id="play" type="button">Reproducir</button>
+      <label for="container">Contenedor</label>
+      <select id="container"><option value="0">std::vector</option><option value="1">std::deque</option></select>
+      <span id="status"></span>
+    </div>
+    <input id="progress" type="range" min="0" value="0" aria-label="Paso">
+    <p id="event" aria-live="polite"></p>
+  </section>
+  <div class="layout">
+    <section class="panel" aria-label="Gráfica del estado actual"><div id="chart"></div></section>
+    <aside class="panel"><h2>Pasos de este nivel</h2><nav id="timeline" aria-label="Pasos"></nav></aside>
+  </div>
+  <details class="panel"><summary>Entrada y resultado final</summary><p id="summary"></p></details>
+</main>
+<script id="trace" type="application/json">__TRACE_DATA__</script>
+<script>
+"use strict";
+const byId = id => document.getElementById(id);
+const {steps, summary} = JSON.parse(byId("trace").textContent);
+const snapshots = /^(Entrada de la llamada|winners ordenados|winners|losers|pending en orden b1, b2, \.\.\.|chain inicial|chain tras insertar b1 delante de a1|chain tras insertar|Resultado de la llamada):/;
+const starts = [];
+let frames = [];
+let group;
+const replay = steps.map(([depth, event], index) => {
+  const [message, ...attached] = event.split("\n");
+  if (message.startsWith("Ordenar con ")) {
+    starts.push(index);
+    group = starts.length - 1;
+    frames = [];
+  }
+  frames.length = Math.min(frames.length, depth + 1);
+  const frame = frames[depth] || { rows: {} };
+  const comparison = message.match(/^Búsqueda: left=(\d+), right=(\d+), mid=(\d+)/);
+  const range = message.match(/^Buscar sitio .* en \[0, (\d+)\)/);
+  let focus = frame.focus;
+  let rows = frame.rows;
+  for (const line of [message, ...attached]) {
+    const match = line.match(snapshots);
+    if (!match) continue;
+    const title = match[1];
+    const key = title.split(" ")[0];
+    const bars = Array.from(line.matchAll(/\[(\d+)#(\d+)\]/g), ([, value, id]) => ({value: Number(value), id}));
+    rows = {...rows, [key]: {title, bars}};
+    focus = null;
+  }
+  const insertion = message.match(/^Insertar en el índice (\d+)/);
+  if (insertion && attached.length) focus = [0, rows.chain.bars.length, Number(insertion[1])];
+  if (comparison) focus = comparison.slice(1).map(Number);
+  if (range) focus = [0, Number(range[1]), -1];
+  frames[depth] = {rows, focus};
+  return {depth, message, group, rows, focus};
+});
+const maximum = summary[0].split(/\s+/).slice(1).reduce((max, value) => Math.max(max, Number(value)), 1);
+let position = 0;
+let timer;
+let shownGroup = -1;
+let shownDepth = -1;
+let timelineButtons = new Map();
+const progress = byId("progress");
+progress.max = replay.length - 1;
+byId("summary").textContent = summary.join(" · ");
+
+function addRow(container, key, {title, bars}, focus) {
+  const row = document.createElement("section");
+  row.className = "row-" + key;
+  const heading = document.createElement("h2");
+  heading.textContent = title;
+  row.append(heading);
+  const strip = document.createElement("div");
+  strip.className = "bars " + key;
+  bars.forEach(({value, id}, index) => {
+    const bar = document.createElement("div");
+    bar.className = "bar";
+    if (focus && index === focus[2]) bar.classList.add("highlight");
+    if (focus && (index < focus[0] || index >= focus[1])) bar.classList.add("dim");
+    const number = document.createElement("span");
+    number.textContent = value;
+    const fill = document.createElement("span");
+    fill.className = "fill";
+    fill.style.height = Math.max(4, Math.round(value / maximum * 90)) + "px";
+    const identity = document.createElement("small");
+    identity.textContent = "#" + id;
+    bar.append(number, fill, identity);
+    strip.append(bar);
+  });
+  if (!bars.length) strip.textContent = "Vacío";
+  row.append(strip);
+  container.append(row);
+}
+
+function render(index) {
+  position = Math.max(0, Math.min(index, replay.length - 1));
+  const {depth, message, group, focus} = replay[position];
+  const {rows} = replay[position === starts[group] ? position + 1 : position];
+  byId("status").textContent = "Paso " + (position + 1) + " de " + replay.length + " · Nivel " + depth;
+  byId("container").value = group;
+  byId("event").textContent = message;
+  progress.value = position;
+  byId("prev").disabled = position === 0;
+  byId("next").disabled = position === replay.length - 1;
+  const chart = byId("chart");
+  chart.replaceChildren();
+  for (const key of ["Entrada", "winners", "losers", "pending", "chain", "Resultado"]) {
+    if (rows[key]) addRow(chart, key, rows[key], key === "chain" ? focus : null);
+  }
+  if (!chart.childElementCount) chart.textContent = "Avanza para ver los números de esta llamada.";
+  if (shownGroup !== group || shownDepth !== depth) {
+    shownGroup = group;
+    shownDepth = depth;
+    timelineButtons = new Map();
+    const timeline = byId("timeline");
+    timeline.replaceChildren();
+    replay.forEach((step, i) => {
+      if (step.group !== group || step.depth !== depth) return;
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = (i + 1) + ". " + step.message.split(": [")[0];
+      button.onclick = () => { pause(); render(i); };
+      timeline.append(button);
+      timelineButtons.set(i, button);
+    });
+  }
+  for (const [i, button] of timelineButtons) button.setAttribute("aria-current", i === position);
+  const currentButton = timelineButtons.get(position);
+  if (currentButton) currentButton.scrollIntoView({block: "nearest"});
+}
+
+function pause() {
+  clearInterval(timer);
+  timer = undefined;
+  byId("play").textContent = "Reproducir";
+}
+
+byId("prev").onclick = () => { pause(); render(position - 1); };
+byId("next").onclick = () => { pause(); render(position + 1); };
+byId("container").onchange = event => { pause(); render(starts[Number(event.target.value)]); };
+progress.oninput = () => { pause(); render(Number(progress.value)); };
+byId("play").onclick = () => {
+  if (timer !== undefined) return pause();
+  if (position === replay.length - 1) render(0);
+  byId("play").textContent = "Pausar";
+  timer = setInterval(() => {
+    render(position + 1);
+    if (position === replay.length - 1) pause();
+  }, 850);
+};
+document.addEventListener("keydown", event => {
+  if (event.target.closest("input, select") || !["ArrowLeft", "ArrowRight"].includes(event.key)) return;
+  event.preventDefault();
+  pause();
+  render(position + (event.key === "ArrowRight" ? 1 : -1));
+});
+render(0);
+</script>
+</body>
+</html>

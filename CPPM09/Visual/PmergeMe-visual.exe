@@ -1,0 +1,200 @@
+#!/usr/bin/env python3
+"""Open a graphical replay of ex02 without editing its sources."""
+
+import argparse
+import base64
+import json
+import os
+from pathlib import Path
+import shutil
+import subprocess
+import sys
+import tempfile
+import webbrowser
+
+
+TRACE_HELPERS = r'''
+namespace {
+    int traceDepth = -1;
+
+    struct TraceLevel {
+        TraceLevel() { ++traceDepth; }
+        ~TraceLevel() { --traceDepth; }
+    };
+
+    std::ostream &trace() {
+        return std::cerr << '@' << traceDepth << '|';
+    }
+
+    template <typename Container>
+    void snapshot(const char *label, const Container &items, bool attach = false) {
+        trace() << (attach ? "~" : "") << label << ':';
+        for (std::size_t i = 0; i < items.size(); ++i)
+            std::cerr << " [" << items[i].value << '#' << items[i].id << ']';
+        std::cerr << '\n';
+    }
+}
+'''
+
+
+def instrument(source):
+    # The same operations appear once in each container implementation.
+    edits = [
+        ("    if (values.size() < 2)\n        return;",
+         '    TraceLevel level;\n'
+         '    snapshot("Entrada de la llamada", values);\n'
+         '    if (values.size() < 2) {\n'
+         '        trace() << "Caso base: ya está ordenado.\\n";\n'
+         '        return;\n    }'),
+        ("    }\n    const std::",
+         '        trace() << "Pareja (" << values[i].value << ", " << values[i + 1].value\n'
+         '                << ") → winner " << winners.back().value << "#" << winners.back().id\n'
+         '                << ", loser " << losers.back().value << "#" << losers.back().id << "\\n";\n'
+         '        snapshot("winners", winners, true);\n'
+         '        snapshot("losers", losers, true);\n'
+         '    }\n'
+         '    if (values.size() % 2 != 0)\n'
+         '        trace() << "Elemento suelto: " << values.back().value << "\\n";\n'
+         '    trace() << "Llamada recursiva para ordenar winners.\\n";\n'
+         '    const std::'),
+        ("    sort{kind}(winners);",
+         '    sort{kind}(winners);\n    snapshot("winners ordenados", winners);'),
+        ("        pending.push_back(losers[pair]);",
+         '        pending.push_back(losers[pair]);\n'
+         '        trace() << "b" << i + 1 << " = " << losers[pair].value << "#" << losers[pair].id\n'
+         '                << " va con a" << i + 1 << " = " << winners[i].value << "#" << winners[i].id << "\\n";\n'
+         '        snapshot("pending en orden b1, b2, ...", pending, true);'),
+        ("        pending.push_back(values.back());",
+         '        pending.push_back(values.back());\n'
+         '    snapshot("pending en orden b1, b2, ...", pending);'),
+        ("    chain.insert(chain.begin(), pending[0]);",
+         '    snapshot("chain inicial", chain);\n'
+         '    chain.insert(chain.begin(), pending[0]);\n'
+         '    snapshot("chain tras insertar b1 delante de a1", chain);'),
+        ("            ? jacob : pending.size();",
+         '            ? jacob : pending.size();\n'
+         '        trace() << "Jacobsthal: jacob=" << jacob << ", inserted=" << inserted\n'
+         '                << "; insertar desde b" << end << " hasta b" << inserted + 1 << "\\n";'),
+        ("            const std::size_t position =",
+         '            trace() << "Buscar sitio para b" << index << " = " << pending[current].value\n'
+         '                    << " en [0, " << right << ")";\n'
+         '            if (current < winners.size())\n'
+         '                std::cerr << ", antes de su winner " << winners[current].value;\n'
+         '            else\n'
+         '                std::cerr << ", toda la cadena porque va suelto";\n'
+         '            std::cerr << "\\n";\n'
+         '            const std::size_t position ='),
+        ("        if (chain[middle].value < value)",
+         '        trace() << "Búsqueda: left=" << left << ", right=" << right << ", mid=" << middle\n'
+         '                << "; ¿" << chain[middle].value << " < " << value << "? "\n'
+         '                << (chain[middle].value < value ? "sí: left = mid + 1" : "no: right = mid") << "\\n";\n'
+         '        if (chain[middle].value < value)'),
+        ("            chain.insert(chain.begin() + position, pending[current]);",
+         '            trace() << "Insertar en el índice " << position << "\\n";\n'
+         '            chain.insert(chain.begin() + position, pending[current]);\n'
+         '            snapshot("chain tras insertar", chain, true);'),
+        ("        inserted = end;",
+         '        inserted = end;\n'
+         '        trace() << "Fin del grupo: inserted = " << inserted << "\\n";'),
+        ("    values.swap(chain);",
+         '    values.swap(chain);\n    snapshot("Resultado de la llamada", values);'),
+        ("    sort{kind}(_{container});",
+         '    std::cerr << "@0|Ordenar con std::{container}\\n";\n    sort{kind}(_{container});'),
+    ]
+    for old, new in edits:
+        if "{kind}" in old:
+            for kind in ("Vector", "Deque"):
+                source = replace_checked(source, old.replace("{kind}", kind).replace("{container}", kind.lower()),
+                                         new.replace("{kind}", kind).replace("{container}", kind.lower()), 1)
+        else:
+            source = replace_checked(source, old, new, 2)
+    return replace_checked(source, "#include <stdexcept>\n", "#include <stdexcept>\n" + TRACE_HELPERS, 1)
+
+
+def replace_checked(source, old, new, count):
+    if source.count(old) != count:
+        raise ValueError(f"El código de ex02 cambió y el visor no reconoce esta línea: {old.strip()}")
+    return source.replace(old, new)
+
+
+def open_replay(steps, summary, destination):
+    template = Path(__file__).with_name("PmergeMe-visual.html").read_text(encoding="utf-8")
+    data = json.dumps({"steps": steps, "summary": summary}).replace("<", r"\u003c")
+    document = template.replace("__TRACE_DATA__", data, 1)
+    if destination is None:
+        with tempfile.NamedTemporaryFile(
+            mode="w", encoding="utf-8", prefix="PmergeMe-", suffix=".html", delete=False
+        ) as output:
+            output.write(document)
+            destination = Path(output.name)
+        if open_browser(destination):
+            return
+    else:
+        destination = destination.resolve()
+        destination.write_text(document, encoding="utf-8")
+    print(f"Vista gráfica: {destination.as_uri()}")
+
+
+def open_browser(destination):
+    if os.environ.get("WSL_DISTRO_NAME") or "microsoft" in os.uname().release.lower():
+        wslpath = shutil.which("wslpath")
+        powershell = shutil.which("powershell.exe")
+        if wslpath and powershell:
+            converted = subprocess.run(
+                [wslpath, "-w", str(destination)], capture_output=True, text=True
+            )
+            if converted.returncode == 0:
+                windows_path = converted.stdout.strip().replace("'", "''")
+                command = f"$ErrorActionPreference = 'Stop'; Start-Process -FilePath '{windows_path}'"
+                encoded = base64.b64encode(command.encode("utf-16-le")).decode("ascii")
+                opened = subprocess.run(
+                    [powershell, "-NoProfile", "-EncodedCommand", encoded],
+                    capture_output=True,
+                )
+                if opened.returncode == 0:
+                    return True
+    return webbrowser.open(destination.as_uri(), new=1)
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Recorre la ejecución de PmergeMe paso a paso.")
+    parser.add_argument("--html", type=Path, help="guarda el visor HTML sin abrir el navegador")
+    parser.add_argument("numeros", nargs="*", help="enteros positivos para pasar a PmergeMe")
+    args = parser.parse_args()
+    source = Path(__file__).resolve().parent / "ex02"
+    values = args.numeros or ["8", "3", "11", "1", "7", "5", "2"]
+    with tempfile.TemporaryDirectory(prefix="pmergeme-visual-") as directory:
+        work = Path(directory)
+        for name in ("Makefile", "main.cpp", "PmergeMe.cpp", "PmergeMe.hpp"):
+            shutil.copyfile(source / name, work / name)
+        trace_source = work / "PmergeMe.cpp"
+        trace_source.write_text(instrument(trace_source.read_text(encoding="utf-8")), encoding="utf-8")
+        build = subprocess.run(["make", "-s"], cwd=work, capture_output=True, text=True)
+        if build.returncode:
+            sys.stderr.write(build.stdout + build.stderr)
+            return build.returncode
+        result = subprocess.run([str(work / "PmergeMe"), *values], capture_output=True, text=True)
+    steps = []
+    for line in result.stderr.splitlines():
+        if line.startswith("@"):
+            depth, message = line[1:].split("|", 1)
+            if message.startswith("~"):
+                last_depth, event = steps[-1]
+                if int(depth) != last_depth:
+                    raise ValueError("La captura pertenece a otro nivel de la recursión.")
+                steps[-1] = (last_depth, event + "\n" + message[1:])
+            else:
+                steps.append((int(depth), message))
+        else:
+            print(line, file=sys.stderr)
+    if result.returncode:
+        return result.returncode
+    open_replay(steps, result.stdout.splitlines()[:2], args.html)
+    return 0
+
+
+if __name__ == "__main__":
+    try:
+        sys.exit(main())
+    except (OSError, ValueError) as error:
+        sys.exit(f"Error: {error}")

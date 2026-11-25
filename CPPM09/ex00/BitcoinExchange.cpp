@@ -82,7 +82,7 @@ static double parseValue(const std::string &text)
      ss >> std::ws;
      if (!ss.eof())
          throw std::runtime_error("bad input => " + text);
-     // NaN no es igual a sí mismo.
+     // NaN does not compare equal to itself.
      if (value != value)
          throw std::runtime_error("bad input => " + text);
      if (value < 0.0)
@@ -93,13 +93,13 @@ static double parseValue(const std::string &text)
 }
 static double convertToDouble(const std::string &bc)
 {
-    // Crea un flujo que permite leer valores desde la cadena bc.
+    // Creates a stream for reading values from the string bc.
     std::istringstream ss(bc);
     double rate;
-    //Envia datos de un flujo
+    // Reads the rate from the stream.
     if (!(ss >> rate))
         throw std::runtime_error("Invalid database price: " + bc);
-    //Extrae datos de un flujo ws == WhiteSpace
+    // Consumes any remaining whitespace in the stream.
     ss >> std::ws;
     if (!ss.eof())
         throw std::runtime_error("Invalid database price: " + bc);
@@ -170,7 +170,7 @@ void BitcoinExchange::processInput(const std::string &filename) const
             if (!isValidDate(date))
                 throw std::runtime_error("bad input => " + line);
             double value = parseValue(bc);
-            //busca la primera fecha posterior a la solicitada
+            // Finds the first date after the requested date.
             std::map<std::string, double>::const_iterator it = _rates.upper_bound(date); 
             if (it == _rates.begin())
                 throw std::runtime_error("No exchange rate available for " + date);

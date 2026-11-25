@@ -8,7 +8,7 @@
 class RPN
 {
 private:
-    // LIFO: el último operando introducido es el primero que se extrae.
+    // The last operand pushed is the first one popped (LIFO).
     std::stack<int, std::list<int> > _operands;
     static int calculate(int left, int right, char operation);
 

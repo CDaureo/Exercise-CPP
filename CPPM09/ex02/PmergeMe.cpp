@@ -5,18 +5,18 @@
 #include <limits>
 #include <stdexcept>
 
-// Guarda el valor y un identificador para reconocer su pareja incluso con duplicados.
+// Stores the value and an ID to identify its partner even when values repeat.
 PmergeMe::Element::Element(int number, std::size_t identity)
     : value(number), id(identity) {}
 
-// Crea el objeto con el vector y el deque vacíos.
+// Creates the object with an empty vector and deque.
 PmergeMe::PmergeMe() {}
 
-// Construye una copia de los dos contenedores del objeto recibido.
+// Copies both containers from the source object.
 PmergeMe::PmergeMe(const PmergeMe &other)
     : _vector(other._vector), _deque(other._deque) {}
 
-// Copia ambos contenedores si no es una autoasignación y devuelve el propio objeto.
+// Copies both containers unless this is self-assignment, then returns the object.
 PmergeMe &PmergeMe::operator=(const PmergeMe &other)
 {
     if (this != &other)
@@ -27,14 +27,14 @@ PmergeMe &PmergeMe::operator=(const PmergeMe &other)
     return *this;
 }
 
-// Los contenedores liberan automáticamente su memoria al destruirse el objeto.
+// The containers release their memory automatically when the object is destroyed.
 PmergeMe::~PmergeMe() {}
 
 /*
- * Convierte el argumento a int, aceptando un '+' inicial opcional.
- * Acumula los dígitos y comprueba el límite antes de multiplicar por diez.
- * Lanza una excepción si está vacío, contiene otros caracteres, supera INT_MAX
- * o representa cero; por tanto, solo devuelve enteros estrictamente positivos.
+ * Converts the argument to an int and accepts an optional leading '+'.
+ * Accumulates the digits and checks the bound before multiplying by ten.
+ * Throws if there are no digits, the input contains invalid characters,
+ * or the value exceeds INT_MAX or is zero. Returns a strictly positive integer.
  */
 int PmergeMe::parsePositive(const char *text)
 {
@@ -58,14 +58,33 @@ int PmergeMe::parsePositive(const char *text)
 }
 
 /*
- * Ordena el vector con merge-insertion (Ford-Johnson). Divide los elementos
- * en parejas: el mayor va a winners y el menor a losers. Ordena winners
- * recursivamente y usa los identificadores para recuperar sus parejas.
- * Los ganadores forman la cadena ordenada; el primer perdedor va al principio.
- * Inserta los demás por bloques de Jacobsthal (b3, b2, b5, b4, ...), buscando
- * mediante búsqueda binaria solo antes de su ganador, porque menor <= mayor.
- * Si sobra un elemento sin pareja, lo inserta buscando en toda la cadena.
- * Finalmente sustituye el vector recibido por la cadena ordenada.
+ * Searches [0, right) in the sorted vector chain. Returns the position of
+ * the first element greater than or equal to value, or right if none exists.
+ */
+std::size_t PmergeMe::findInsertPosition(const std::vector<Element> &chain,
+    std::size_t right, int value)
+{
+    std::size_t left = 0;
+    while (left < right)
+    {
+        const std::size_t middle = left + (right - left) / 2;
+        if (chain[middle].value < value)
+            left = middle + 1;
+        else
+            right = middle;
+    }
+    return left;
+}
+
+/*
+ * Sorts the vector using merge-insertion sort (Ford-Johnson). In each pair,
+ * the larger element goes into winners and the smaller into losers. Sorts
+ * the winners recursively and uses IDs to recover their partners.
+ * The winners form the sorted chain. The first loser goes at the front.
+ * Inserts the remaining losers in Jacobsthal groups (b3, b2, b5, b4, ...).
+ * Each binary search stops before the paired winner, which is at least as large.
+ * If an element has no partner, searches the entire chain to insert it.
+ * Replaces the input vector with the sorted chain.
  */
 void PmergeMe::sortVector(std::vector<Element> &values)
 {
@@ -75,7 +94,7 @@ void PmergeMe::sortVector(std::vector<Element> &values)
     std::vector<Element> losers;
     for (std::size_t i = 0; i + 1 < values.size(); i += 2)
     {
-        // Cada pareja conserva su identidad aunque haya valores repetidos.
+        // Each pair retains its identity even when values repeat.
         if (values[i].value > values[i + 1].value)
         {
             winners.push_back(values[i]);
@@ -101,7 +120,7 @@ void PmergeMe::sortVector(std::vector<Element> &values)
     if (values.size() % 2 != 0)
         pending.push_back(values.back());
 
-    // b1 <= a1: se coloca directamente, sin otra comparación.
+    // b1 <= a1: insert directly without another comparison.
     std::vector<Element> chain(winners);
     chain.insert(chain.begin(), pending[0]);
     std::size_t inserted = 1;
@@ -111,7 +130,7 @@ void PmergeMe::sortVector(std::vector<Element> &values)
     {
         const std::size_t end = jacob < pending.size()
             ? jacob : pending.size();
-        // Índices humanos: b3, b2, b5, b4, b11, b10, ..., b6.
+        // One-based indices: b3, b2, b5, b4, b11, b10, ..., b6.
         for (std::size_t index = end; index > inserted; --index)
         {
             const std::size_t current = index - 1;
@@ -122,22 +141,15 @@ void PmergeMe::sortVector(std::vector<Element> &values)
                 while (chain[right].id != winners[current].id)
                     ++right;
             }
-            // Buscar sólo ANTES de su pareja; el impar usa toda la cadena.
-            std::size_t left = 0;
-            while (left < right)
-            {
-                const std::size_t middle = left + (right - left) / 2;
-                if (chain[middle].value < pending[current].value)
-                    left = middle + 1;
-                else
-                    right = middle;
-            }
-            chain.insert(chain.begin() + left, pending[current]);
+            // Exclude the paired winner, or search the full chain if unpaired.
+            const std::size_t position =
+                findInsertPosition(chain, right, pending[current].value);
+            chain.insert(chain.begin() + position, pending[current]);
         }
         inserted = end;
         if (inserted == pending.size())
             break;
-        // J(n) = J(n-1) + 2 * J(n-2), sin desbordar size_t.
+        // J(n) = J(n-1) + 2 * J(n-2), without overflowing size_t.
         const std::size_t maximum = std::numeric_limits<std::size_t>::max();
         const std::size_t next = previousJacob > (maximum - jacob) / 2
             ? pending.size() : jacob + 2 * previousJacob;
@@ -148,12 +160,31 @@ void PmergeMe::sortVector(std::vector<Element> &values)
 }
 
 /*
- * Aplica Ford-Johnson al deque: separa cada pareja en ganador y perdedor,
- * ordena los ganadores recursivamente y reagrupa los perdedores según el id
- * de su ganador. Coloca el primer perdedor al inicio de la cadena ordenada.
- * Después inserta los pendientes en el orden de Jacobsthal, usando búsqueda
- * binaria antes de su pareja; el elemento sin pareja usa toda la cadena.
- * Intercambia el resultado con el deque recibido para dejarlo ordenado.
+ * Searches [0, right) in the sorted deque chain. Returns the position of
+ * the first element greater than or equal to value, or right if none exists.
+ */
+std::size_t PmergeMe::findInsertPosition(const std::deque<Element> &chain,
+    std::size_t right, int value)
+{
+    std::size_t left = 0;
+    while (left < right)
+    {
+        const std::size_t middle = left + (right - left) / 2;
+        if (chain[middle].value < value)
+            left = middle + 1;
+        else
+            right = middle;
+    }
+    return left;
+}
+
+/*
+ * Sorts the deque using Ford-Johnson. Splits each pair into a winner and a loser,
+ * sorts the winners recursively, and matches each loser to its winner by ID.
+ * Places the first loser at the front of the sorted chain. Inserts the remaining
+ * elements in Jacobsthal order, using binary search before each paired winner.
+ * An unpaired element uses the entire chain.
+ * Swaps the sorted chain into the input deque.
  */
 void PmergeMe::sortDeque(std::deque<Element> &values)
 {
@@ -163,7 +194,7 @@ void PmergeMe::sortDeque(std::deque<Element> &values)
     std::deque<Element> losers;
     for (std::size_t i = 0; i + 1 < values.size(); i += 2)
     {
-        // Cada pareja conserva su identidad aunque haya valores repetidos.
+        // Each pair retains its identity even when values repeat.
         if (values[i].value > values[i + 1].value)
         {
             winners.push_back(values[i]);
@@ -189,7 +220,7 @@ void PmergeMe::sortDeque(std::deque<Element> &values)
     if (values.size() % 2 != 0)
         pending.push_back(values.back());
 
-    // b1 <= a1: se coloca directamente, sin otra comparación.
+    // b1 <= a1: insert directly without another comparison.
     std::deque<Element> chain(winners);
     chain.insert(chain.begin(), pending[0]);
     std::size_t inserted = 1;
@@ -199,7 +230,7 @@ void PmergeMe::sortDeque(std::deque<Element> &values)
     {
         const std::size_t end = jacob < pending.size()
             ? jacob : pending.size();
-        // Índices humanos: b3, b2, b5, b4, b11, b10, ..., b6.
+        // One-based indices: b3, b2, b5, b4, b11, b10, ..., b6.
         for (std::size_t index = end; index > inserted; --index)
         {
             const std::size_t current = index - 1;
@@ -210,22 +241,15 @@ void PmergeMe::sortDeque(std::deque<Element> &values)
                 while (chain[right].id != winners[current].id)
                     ++right;
             }
-            // Buscar sólo ANTES de su pareja; el impar usa toda la cadena.
-            std::size_t left = 0;
-            while (left < right)
-            {
-                const std::size_t middle = left + (right - left) / 2;
-                if (chain[middle].value < pending[current].value)
-                    left = middle + 1;
-                else
-                    right = middle;
-            }
-            chain.insert(chain.begin() + left, pending[current]);
+            // Exclude the paired winner, or search the full chain if unpaired.
+            const std::size_t position =
+                findInsertPosition(chain, right, pending[current].value);
+            chain.insert(chain.begin() + position, pending[current]);
         }
         inserted = end;
         if (inserted == pending.size())
             break;
-        // J(n) = J(n-1) + 2 * J(n-2), sin desbordar size_t.
+        // J(n) = J(n-1) + 2 * J(n-2), without overflowing size_t.
         const std::size_t maximum = std::numeric_limits<std::size_t>::max();
         const std::size_t next = previousJacob > (maximum - jacob) / 2
             ? pending.size() : jacob + 2 * previousJacob;
@@ -236,18 +260,17 @@ void PmergeMe::sortDeque(std::deque<Element> &values)
 }
 
 /*
- * Exige al menos un argumento y carga los números validados en cada contenedor.
- * Mide por separado el tiempo de CPU de validación, carga y ordenación para
- * vector y deque. Comprueba que ambos resultados coincidan y muestra la entrada,
- * la secuencia ordenada y los tiempos en microsegundos. Los errores se propagan
- * a main mediante excepciones.
+ * Requires at least one argument and loads the validated numbers into each container.
+ * Measures CPU time for validation, loading, and sorting separately for the
+ * vector and deque. Checks that both results match and prints the input,
+ * the sorted sequence, and the times in microseconds. Exceptions propagate to main.
  */
 void PmergeMe::run(int argc, char **argv)
 {
     if (argc < 2)
         throw std::invalid_argument("usage: ./PmergeMe positive_integer [...]");
 
-    // Cada medición incluye validación, carga y auxiliares del algoritmo.
+    // Each measurement includes validation, loading, and the algorithm's auxiliary work.
     const std::clock_t vectorStart = std::clock();
     _vector.clear();
     _vector.reserve(argc - 1);

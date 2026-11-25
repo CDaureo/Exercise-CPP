@@ -2,8 +2,8 @@
 #include <exception>
 #include <iostream>
 
-// Ejecuta el ordenador con los argumentos recibidos. Si hay una excepción,
-// muestra el error y devuelve 1; si termina correctamente, devuelve 0.
+// Sorts the values passed as arguments. If an exception occurs,
+// prints the error and returns 1. Returns 0 on success.
 int main(int argc, char **argv)
 {
     try
